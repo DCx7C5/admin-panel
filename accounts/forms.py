@@ -5,7 +5,7 @@ from django.forms import (
     PasswordInput,
 )
 
-from account.models import CustomUser
+from accounts.models import CustomUser
 
 
 class LoginForm(Form):

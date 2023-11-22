@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account.apps.AccountConfig',
+    'accounts.apps.AccountConfig',
     'dashboard.apps.DashboardConfig',
 
 ]
@@ -125,4 +125,4 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 
-AUTH_USER_MODEL = "account.CustomUser"
+AUTH_USER_MODEL = "accounts.CustomUser"
