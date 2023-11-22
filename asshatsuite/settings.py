@@ -23,18 +23,22 @@ ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
-    'debug_toolbar',                # DEBUG TOOLBAR
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Plugins/Modules
+    'debug_toolbar',                # DEBUG TOOLBAR
     'django_bootstrap5',            # BOOTSTRAP5
+
+    # Local modules
     'accounts',
     'dashboard',
-    'dashboard.sidebar',
 ]
+
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
