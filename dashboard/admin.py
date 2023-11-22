@@ -5,7 +5,7 @@ from django.contrib.sessions.models import Session
 
 
 class SessionAdmin(ModelAdmin):
-    list_display = ('session_key', '_session_data', 'expire_date')
+    list_display = ['session_key', 'session_data', 'expire_date']
 
 
 class AdminLogAdmin(ModelAdmin):

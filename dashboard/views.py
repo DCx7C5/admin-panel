@@ -1,5 +1,4 @@
-from asgiref.typing import HTTPRequestEvent
-from django.views.generic import ListView, TemplateView
+from django.views.generic import TemplateView
 
 
 class DashboardView(TemplateView):

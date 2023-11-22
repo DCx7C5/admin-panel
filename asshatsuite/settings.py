@@ -22,19 +22,18 @@ DEBUG = env.bool('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
-
 INSTALLED_APPS = [
+    'debug_toolbar',                # DEBUG TOOLBAR
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts.apps.AccountConfig',
-    'debug_toolbar',
-    'dashboard.apps.DashboardConfig',
-
+    'django_bootstrap5',            # BOOTSTRAP5
+    'accounts',
+    'dashboard',
+    'dashboard.sidebar',
 ]
 
 MIDDLEWARE = [
@@ -127,7 +126,7 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'dashboard'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -137,5 +136,4 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 INTERNAL_IPS = [
     "127.0.0.1",
-
 ]
