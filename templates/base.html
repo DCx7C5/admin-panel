@@ -94,11 +94,6 @@
 
     {# -- Add your scripts and other body elements here -- #}
 
-    {# -- Bootstrap JavaScript if it is in body -- #}
-    {% if not 'javascript_in_head'|bootstrap_setting %}
-        {% bootstrap_javascript %}
-    {% endif %}
-
     {% if user.is_authenticated %}
 
     {% endif %}

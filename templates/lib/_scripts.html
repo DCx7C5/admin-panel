@@ -1,25 +1,27 @@
 {% load bootstrap5 %}
 {% bootstrap_javascript %}
 
-{# -- Django5 doesn't logout bc request method is not POST, this is a workaround -- #}
-<script>
-    function logout() {
-        // Create a form element
-        const form = document.createElement('form');
-        form.action = "{% url 'logout' %}";  // Set the form action to the logout URL
-        form.method = 'post';
+{% if user.is_authenticated %}
+    {# -- Django5 doesn't logout bc request method is not POST, this is a workaround -- #}
+    <script>
+        function logout() {
+            // Create a form element
+            const form = document.createElement('form');
+            form.action = "{% url 'logout' %}";  // Set the form action to the logout URL
+            form.method = 'post';
 
-        // Create a CSRF token input field
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = 'csrfmiddlewaretoken';
-        csrfInput.value = '{{ csrf_token }}';
+            // Create a CSRF token input field
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = '{{ csrf_token }}';
 
-        // Append the CSRF token input field to the form
-        form.appendChild(csrfInput);
+            // Append the CSRF token input field to the form
+            form.appendChild(csrfInput);
 
-        // Append the form to the body and submit it
-        document.body.appendChild(form);
-        form.submit();
-    }
-</script>
+            // Append the form to the body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+{% endif %}
