@@ -7,6 +7,7 @@ from accounts.forms import CustomUserCreationForm, CustomUserChangeForm
 CustomUser = get_user_model()
 
 
+@admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -20,5 +21,3 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("age",)}),)
     add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ("age",)}),)
 
-
-admin.site.register(CustomUser, CustomUserAdmin)
