@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     # Local modules
     'accounts.apps.AccountConfig',
     'dashboard.apps.DashboardConfig',
-    'sidebar.apps.SidebarConfig',
 ]
 
 
