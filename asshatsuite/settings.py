@@ -18,7 +18,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -80,10 +80,13 @@ ASGI_APPLICATION = 'asshatsuite.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# no host and port since we communicate over unix socket in docker container
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env.str('DB_NAME'),
+        'USER': env.str('DB_USER'),
+        'PASSWORD': env.str('DB_PASS'),
     }
 }
 
@@ -182,3 +185,12 @@ LOGGING = {
         },
     },
 }
+
+
+# enumerate container/host ip
+if DEBUG:
+    import socket
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    ipl = [ip[: ip.rfind(".")] + ".1" for ip in ips]
+    INTERNAL_IPS += ipl
+    ALLOWED_HOSTS += [hostname, '0.0.0.0'] + ipl
