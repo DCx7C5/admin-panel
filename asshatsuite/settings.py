@@ -35,7 +35,6 @@ INSTALLED_APPS = [
 
     # Toolbar Plugins/Modules
     'debug_toolbar',
-    'django_extensions',
 
     # Plugins/Modules
     'bootstrap5',
