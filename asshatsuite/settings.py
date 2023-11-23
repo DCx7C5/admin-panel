@@ -153,13 +153,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-
     'formatters': {
-        'fmt1': {
+        'verbose': {
             'format': '{asctime} {name} {levelname} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
-
+        'default': {
+            'format': '%(asctime)s [%(levelname)s]- %(message)s',
+        },
     },
     'handlers': {
         'rotating_file': {
@@ -167,21 +168,29 @@ LOGGING = {
             'filename': BASE_DIR / 'asshat.log',
             'maxBytes': 1024 * 1024 * 100,
             'backupCount': 10,
-            'formatter': 'fmt1',
-            'level': 'DEBUG',
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+        'rotating_requests_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'requests.log',
+            'maxBytes': 1024 * 1024 * 100,
+            'backupCount': 10,
+            'encoding': 'utf-8',
         },
         'console': {
-            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'fmt1',
         },
-
     },
     'loggers': {
         'asshatsuite': {
-            'handlers': ['console', 'rotating_file'],
+            'handlers': ['rotating_file', 'console'],
             'level': 'DEBUG',
         },
+        'django': {
+            'handlers': ['rotating_requests_file', 'console'],
+            'level': 'INFO',
+        }
     },
 }
 
