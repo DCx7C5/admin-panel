@@ -30,13 +30,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Toolbar Plugins/Modules
+    'debug_toolbar',
+    'django_extensions',
+
     # Plugins/Modules
-    'debug_toolbar',                # DEBUG TOOLBAR
-    'django_bootstrap5',            # BOOTSTRAP5
+    'bootstrap5',
 
     # Local modules
-    'accounts',
-    'dashboard',
+    'accounts.apps.AccountConfig',
+    'dashboard.apps.DashboardConfig',
+    'sidebar.apps.SidebarConfig',
 ]
 
 
@@ -108,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
 
@@ -141,3 +145,5 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+MEDIA_ROOT = BASE_DIR / 'media'
