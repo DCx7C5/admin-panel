@@ -1,7 +1,6 @@
 from environs import Env
 from pathlib import Path
 
-"""Read environment variables"""
 env = Env()
 env.read_env()
 
@@ -123,10 +122,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 
 # Default primary key field type
@@ -141,10 +140,45 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 
-AUTH_USER_MODEL = "accounts.CustomUser"
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 INTERNAL_IPS = [
-    "127.0.0.1",
+    '127.0.0.1',
 ]
 
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'fmt1': {
+            'format': '{asctime} {name} {levelname} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+
+    },
+    'handlers': {
+        'rotating_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'asshat.log',
+            'maxBytes': 1024 * 1024 * 100,
+            'backupCount': 10,
+            'formatter': 'fmt1',
+            'level': 'DEBUG',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'fmt1',
+        },
+
+    },
+    'loggers': {
+        'asshatsuite': {
+            'handlers': ['console', 'rotating_file'],
+            'level': 'DEBUG',
+        },
+    },
+}
