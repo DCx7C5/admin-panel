@@ -1,12 +1,30 @@
 {% extends "base.html" %}
+{% load static bootstrap5 %}
 
 {% block title %}Log In{% endblock title %}
 
-{% block content %}
-<h2>Log In</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log In</button>
-</form>
-{% endblock content %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/login.css' %}">{% endblock extra_head %}
+
+{% block body %}
+
+    <div class="text-center" id="login-wrap">
+
+        {% bootstrap_messages %}
+
+        <main class="form-signin w-100 m-auto">
+            <form method="post">
+                {% csrf_token %}
+
+                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                {% bootstrap_field form.username layout='inline' %}
+
+                {% bootstrap_field form.password layout='inline' %}
+
+                {% bootstrap_button button_type="submit" content="Log In" button_class='w-100 btn btn-lg btn-primary' %}
+
+                <p class="mt-5 mb-3 text-muted">©2023</p>
+            </form>
+        </main>
+</div>
+
+{% endblock body %}

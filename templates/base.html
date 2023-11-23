@@ -1,39 +1,116 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+
+{% load static bootstrap5 i18n ah_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
 <head>
-    <title>{% block title %}{% endblock %}</title>
-    <link href="{% static "css/base.css" %}" rel="stylesheet">
+
+    {# -- Page title -- #}
+    {% block title_outer %}
+        <title>{% block title %}Website{% endblock %}</title>
+    {% endblock %}
+
+    {# -- Required meta tags -- #}
+    {% block meta_outer %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {% endblock %}
+
+    {% block stylesheets_outer %}
+        {% include 'lib/_styles.html' %}
+        {% block stylesheets %}{% endblock %}
+    {% endblock %}
+
+    {% block extra_head %}{% endblock extra_head %}
+
 </head>
-<body>
-    <div id="header">
-        <span class="logo">test</span>
-        {% if request.user.is_authenticated %}
-            <ul class="menu">
-                <li {% if section == "dashboard" %}class="selected"{% endif %}>
-                <a href="{% url "dashboard" %}">My dashboard</a>
-                </li>
-                <li {% if section == "images" %}class="selected"{% endif %}>
-                <a href="#">Images</a>
-                </li>
-                <li {% if section == "people" %}class="selected"{% endif %}>
-                <a href="#">People</a>
-                </li>
-            </ul>
-        {% endif %}
-        <span class="user">
-            {% if request.user.is_authenticated %}
-                Hello {{ request.user.first_name|default:request.user.username }},
-                <a href="{% url "logout" %}">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}">Log In</a>
-                <a href="{% url 'signup' %}">Sign Up</a>
+
+<body class="flex-container">
+{# -- ends before body close tag -- #}
+{% block full_body %}
+
+    {# -- ends after footer, all scripts included -- #}
+    {% block body %}
+        <div class="wrapper">
+
+            {# -- Navbar -- #}
+            {% block navbar %}
+                {% include 'lib/_header.html' %}
+            {% endblock %}
+
+            {% if user.is_authenticated %}
+
+                {# -- SideBar -- #}
+                {% block sidebar %}
+                    {% include 'lib/_sidebar.html' %}
+                {% endblock sidebar %}
+
+                {% block content_wrapper %}
+                <div class="content-wrapper">
+
+                    {% block content_header %}
+                        <section class="content-header">
+                            {% block no_heading %}
+
+                                {# -- Page Name -- #}
+                                <h1>{% block page_name %}{% endblock %}</h1>
+
+                                {# -- Breadcrumbs -- #}
+                                {% block breadcrumbs %}{% endblock %}
+
+                            {% endblock no_heading %}
+                        </section>
+                    {% endblock %}
+
+                    {# -- Content -- #}
+                    {% block content_outer %}
+                        <section class="content">
+
+                            {% block messages %}
+                                {% include 'lib/_messages.html' %}
+                            {% endblock %}
+
+                            {% block content_block_wrap %}
+                                {% block content %}{% endblock %}
+                            {% endblock %}
+
+                        </section>
+                    {% endblock %}
+
+                </div>
+                {% endblock content_wrapper %}
+
             {% endif %}
-        </span>
-    </div>
-    <div id="content">
-    {% block content %}
-    {% endblock content %}
-    </div>
+
+            {# -- Footer -- #}
+            {% block footer %}
+                {% include 'lib/_footer.html' %}
+            {% endblock %}
+
+        </div>
+    {% endblock body %}
+
+    {# -- Add your scripts and other body elements here -- #}
+
+    {# -- Bootstrap JavaScript if it is in body -- #}
+    {% if not 'javascript_in_head'|bootstrap_setting %}
+        {% bootstrap_javascript %}
+    {% endif %}
+
+    {% if user.is_authenticated %}
+
+    {% endif %}
+
+    {% block javascript %}
+        {% include 'lib/_scripts.html' %}
+        {% block js %}{% endblock %}
+    {% endblock %}
+
+    {% block extra_script %}{% endblock %}
+    {% block extra_foot %}{% endblock %}
+
+{% endblock full_body %}
 </body>
 </html>
