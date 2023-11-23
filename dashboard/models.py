@@ -1,5 +1,4 @@
 from __future__ import annotations
-import uuid
 
 from django.contrib.auth import get_user_model
 from django.db.models import (
@@ -9,46 +8,53 @@ from django.db.models import (
     CASCADE,
     BooleanField,
     GenericIPAddressField,
-    UUIDField,
-    Index,
-    DateTimeField, QuerySet, Manager,
+    DateTimeField, QuerySet, Manager, URLField,
 )
 
 
 CustomUser = get_user_model()
 
 
+class SidebarItemManager(Manager):
+    async def get_queryset(self):
+        return await super().get_queryset().filter(context='SB')
+
+
 class MenuItem(Model):
-    id = UUIDField(
-        primary_key=True,
-        db_index=True,
-        default=uuid.uuid4,
-        editable=False
+
+    name = CharField(
+        max_length=50,
+        unique=True,
+        editable=True,
+        null=False,
     )
-    name = CharField(max_length=50)
-    context = CharField(max_length=30)
+    path = URLField(
+        verbose_name='url path',
+        default='/',
+        editable=True,
+    )
+    context = CharField(
+        max_length=2,
+        choices=[('SB', 'Sidebar'), ],
+        null=False,
+        editable=True,
+    )
+    objects = Manager()
+    sidebar_items = SidebarItemManager()
 
     class Meta:
-        indexes = [Index(fields=['id'], name='id_menuitem')]
+        verbose_name = 'menu item'
+        verbose_name_plural = 'menu items'
         managed: True
 
 
-class HostQuerySet(QuerySet):
-    def remotes(self):
-        return self.filter(remotes=True)
-
-    def local(self):
-        return self.filter(remotes=False)
-
-
 class HostManager(Manager):
-
-    async def get_queryset(self):
-        return HostQuerySet(self.model, using=self._db)
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset()
 
 
 class RemoteHostManager(Manager):
-    async def get_queryset(self) -> QuerySet:
+    def get_queryset(self) -> QuerySet:
         return super().get_queryset().filter(remote=True)
 
     async def create_rhost(self, address, name, owner, remote=True, *args, **kwargs):
@@ -59,15 +65,17 @@ class RemoteHostManager(Manager):
 
 
 class Host(Model):
-    id = UUIDField(
-        primary_key=True,
-        db_index=True,
-        default=uuid.uuid4,
-        editable=False
+
+    address = GenericIPAddressField(
+        verbose_name='host ip address',
+        unique=True,
+        editable=True,
     )
-    address = GenericIPAddressField()
     name = CharField(
+        verbose_name='hostname',
         max_length=253,
+        unique=True,
+        editable=True,
     )
     owner = ForeignKey(
         to=CustomUser,
@@ -75,15 +83,28 @@ class Host(Model):
     )
     remote = BooleanField(
         verbose_name='is remote host',
+        editable=False,
     )
-    hosts = HostManager()
+
     remote_hosts = RemoteHostManager()
-    created = DateTimeField(auto_now_add=True)
-    updated = DateTimeField(auto_now=True)
+
+    created = DateTimeField(
+        verbose_name='created on',
+        auto_now_add=True,
+    )
+
+    updated = DateTimeField(
+        verbose_name='last update on',
+        auto_now=True,
+    )
 
     class Meta:
-        indexes = [Index(fields=['id'], name='id_host')]
         managed = True
+        verbose_name = 'host'
+        verbose_name_plural = 'hosts'
+
+    async def delete(self, using=None, keep_parents=False):
+        await super().adelete(using, keep_parents)
 
     async def save(self, *args, **kwargs):
-        await super().save(*args, **kwargs)
+        await super().asave(*args, **kwargs)
