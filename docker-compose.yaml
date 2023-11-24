@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: django
+    command: ash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
@@ -13,6 +14,8 @@ services:
       - pgsocket:/var/run/postgresql/
     depends_on:
       - db
+    env_file:
+      - .env
 
   db:
     restart: always
@@ -27,6 +30,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
       - pgsocket:/var/run/postgresql/
+    env_file:
+      - .env
 
 volumes:
   pgdata:

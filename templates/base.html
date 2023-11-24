@@ -94,10 +94,6 @@
 
     {# -- Add your scripts and other body elements here -- #}
 
-    {% if user.is_authenticated %}
-
-    {% endif %}
-
     {% block javascript %}
         {% include 'lib/_scripts.html' %}
         {% block js %}{% endblock %}

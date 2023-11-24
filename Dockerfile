@@ -13,17 +13,13 @@ RUN apk update && apk add \
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-COPY .env /.env
 COPY requirements.txt /requirements.txt
 
-RUN chmod 600 /.env
-
-RUN pip install --upgrade pip
-RUN pip install --no-deps -r /requirements.txt && \
+RUN pip install --upgrade --no-cache-dir pip
+RUN pip install --no-deps --no-cache-dir -r /requirements.txt && \
     rm /requirements.txt && \
     rm -rf /root/.cache
 
 WORKDIR /project
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

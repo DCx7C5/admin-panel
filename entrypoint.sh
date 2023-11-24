@@ -5,7 +5,7 @@ set -o errexit
 # exits if any of your variables is not set
 set -o nounset
 
-. /.env
+. /project/.env
 
 PG_LOCKFILE="/var/run/postgresql/.s.PGSQL.${DB_PORT:-5432}.lock"
 PSQL_CMD="psql --username=$DB_USER --password=$DB_PASS $DB_NAME"
