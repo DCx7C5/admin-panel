@@ -1,0 +1,57 @@
+<div id="terminal" class="resize-drag container-fluid">
+Resize from any edge or corner
+</div>
+<script>
+
+        Terminal.applyAddon(fit)
+
+        const socket = io.connect({transports: ["websocket", "polling"]});
+
+        const status = document.getElementById("status")
+        const button = document.getElementById("button")
+
+        const term = new Terminal({
+            cursorBlink: true,
+        });
+
+        term.open(document.getElementById('terminal'));
+
+        term.on('key', (key, ev) => {
+            console.log("pressed key", key)
+            socket.emit("pty_input", {"input": key})
+        });
+
+        socket.on("pty_output", function(output){
+            console.log(output["output"])
+            term.write(output["output"])
+        })
+
+        socket.on("connect", () => {
+        status.innerHTML = '<span style="background-color: lightgreen;">connected</span>'
+        button.innerHTML = 'Disconnect'
+        })
+
+        socket.on("disconnect", () => {
+        status.innerHTML =  '<span style="background-color: #ff8383;">disconnected</span>'
+        button.innerHTML = 'Connect'
+
+        })
+
+        function myFunction(){
+            if (button.innerHTML ==='Connect'){
+               location.reload();
+            }
+
+            else if (button.innerHTML === "Disconnect"){
+                socket.emit("disconnect_request")
+            }
+        }
+
+        function resize(){
+        term.fit()
+        socket.emit("resize", {"cols": term.cols, "rows": term.rows})
+        }
+
+        window.onresize = resize
+        window.onload = resize
+</script>

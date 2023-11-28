@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
-{% block body %}
+{% block content_wrapper %}
 
-    <div class="text-center" id="login-wrap">
+    <div class="text-center min-vh-100 max-vh-100" id="login-wrap">
 
         {% bootstrap_messages %}
 
         <main class="form-signin w-100 m-auto">
             <form method="post">
-                {% csrf_token %}
 
+                {% csrf_token %}
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
                 {% bootstrap_field form.username layout='inline' %}
 
@@ -29,4 +29,5 @@
         </main>
 </div>
 
-{% endblock body %}
+{% endblock content_wrapper %}
+{% block footer %}{% endblock %}

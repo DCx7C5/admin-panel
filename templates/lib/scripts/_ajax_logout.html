@@ -1,0 +1,16 @@
+{% load static %}
+<script>
+function logout() {
+  window.localStorage.clear();
+  const form = document.createElement('form');
+  form.action = "{{ logout_url }}";
+  form.method = 'post';
+  const csrfInput = document.createElement('input');
+  csrfInput.type = 'hidden';
+  csrfInput.name = 'csrfmiddlewaretoken';
+  csrfInput.value = '{{ csrf_token }}';
+  form.appendChild(csrfInput);
+  document.body.appendChild(form);
+  form.submit();
+}
+</script>

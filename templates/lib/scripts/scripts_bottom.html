@@ -1,0 +1,7 @@
+{% load static bootstrap5 core %}
+{% bootstrap_javascript %}
+{% if user.is_authenticated %}
+    {% ajax_logout_javascript 'accounts/logout/' %}
+    <script src="{% static 'js/base.js' %}"></script>
+    <script type="module" src="{% static 'js/term/terminal.js' %}"></script>
+{% endif %}

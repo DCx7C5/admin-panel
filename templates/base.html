@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-{% load static bootstrap5 i18n ah_tags %}
+{% load static bootstrap5 i18n core %}
 {% get_current_language as LANGUAGE_CODE %}
 
 <html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
 <head>
-
     {# -- Page title -- #}
     {% block title_outer %}
         <title>{% block title %}Website{% endblock %}</title>
@@ -19,88 +18,51 @@
     {% endblock %}
 
     {% block stylesheets_outer %}
-        {% include 'lib/_styles.html' %}
+        {% include 'lib/styles.html' %}
         {% block stylesheets %}{% endblock %}
     {% endblock %}
-
     {% block extra_head %}{% endblock extra_head %}
-
 </head>
 
-<body class="flex-container">
+<body class="">
 {# -- ends before body close tag -- #}
 {% block full_body %}
+{# -- ends after footer, all scripts included -- #}
+{% block body %}
+<div id="wrapper" class="container-fluid">
 
-    {# -- ends after footer, all scripts included -- #}
-    {% block body %}
-        <div class="wrapper">
+  {# -- NavBar -- #}
+  {% navbar mode='dark' id='navheader' fixed=True %}
 
-            {# -- Navbar -- #}
-            {% block navbar %}
-                {% include 'lib/_header.html' %}
-            {% endblock %}
+  {% block content_wrapper %}
+  <main id="page-content-wrapper" class="row flex-nowrap">
 
-            {% if user.is_authenticated %}
+    {# -- SideBar -- #}
+    {% if user.is_authenticated %}
+      {% block sidebar %}{% endblock %}
+    {% endif %}
 
-                {# -- SideBar -- #}
-                {% block sidebar %}
-                    {% include 'lib/_sidebar.html' %}
-                {% endblock sidebar %}
+    {# -- Content -- #}
+    <div id="content" class="container">
+      <div id="content-header" class="container-fluid tpanel">
+          {% block content %}cOnTNENT{% endblock %}
+      </div>
+      {% if user.is_authenticated %}
+          {% include 'lib/_terminal.html' %}
+      {% endif %}
+    </div>
+  </main>
+  {% endblock content_wrapper %}
 
-                {% block content_wrapper %}
-                <div class="content-wrapper">
-
-                    {% block content_header %}
-                        <section class="content-header">
-                            {% block no_heading %}
-
-                                {# -- Page Name -- #}
-                                <h1>{% block page_name %}{% endblock %}</h1>
-
-                                {# -- Breadcrumbs -- #}
-                                {% block breadcrumbs %}{% endblock %}
-
-                            {% endblock no_heading %}
-                        </section>
-                    {% endblock %}
-
-                    {# -- Content -- #}
-                    {% block content_outer %}
-                        <section class="content">
-
-                            {% block messages %}
-                                {% include 'lib/_messages.html' %}
-                            {% endblock %}
-
-                            {% block content_block_wrap %}
-                                {% block content %}{% endblock %}
-                            {% endblock %}
-
-                        </section>
-                    {% endblock %}
-
-                </div>
-                {% endblock content_wrapper %}
-
-            {% endif %}
-
-            {# -- Footer -- #}
-            {% block footer %}
-                {% include 'lib/_footer.html' %}
-            {% endblock %}
-
-        </div>
-    {% endblock body %}
-
-    {# -- Add your scripts and other body elements here -- #}
-
-    {% block javascript %}
-        {% include 'lib/_scripts.html' %}
-        {% block js %}{% endblock %}
-    {% endblock %}
-
-    {% block extra_script %}{% endblock %}
-    {% block extra_foot %}{% endblock %}
+</div>
+{% endblock body %}
+{# -- Add your scripts and other body elements here -- #}
+{% block javascript %}
+    {% include 'lib/scripts/scripts_bottom.html' %}
+    {% block js %}{% endblock %}
+{% endblock %}
+{% block extra_script %}{% endblock %}
+{% block extra_foot %}{% endblock %}
 
 {% endblock full_body %}
 </body>
