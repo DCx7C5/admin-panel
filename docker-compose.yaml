@@ -4,11 +4,13 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.web
     container_name: django
-    command: ash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py makemigrations &&
+                      python manage.py migrate &&
+                      python manage.py runserver 0.0.0.0:8000"
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     volumes:
       - .:/project
       - pgsocket:/var/run/postgresql/
@@ -16,9 +18,9 @@ services:
       - db
     env_file:
       - .env
+    hostname: django.ass
 
   db:
-    restart: always
     image: postgres:latest
     container_name: postgres
     environment:
@@ -32,6 +34,23 @@ services:
       - pgsocket:/var/run/postgresql/
     env_file:
       - .env
+    hostname: postgres.ass
+    restart: unless-stopped
+
+  npm:
+    build:
+      context: .
+      dockerfile: Dockerfile.npm
+    command: bash -c "npx webpack --config webpack.config.js
+                                  --mode development 
+                                  --watch"
+    container_name: npm
+    env_file:
+      - .env
+    volumes:
+      - .:/project
+    hostname: npm.ass
+
 
 volumes:
   pgdata:

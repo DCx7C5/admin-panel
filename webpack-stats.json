@@ -1,0 +1,14 @@
+{
+  "status": "done",
+  "assets": {
+    "main-41ed28b7209647dbe68b.js": {
+      "name": "main-41ed28b7209647dbe68b.js",
+      "path": "/project/js/webpack_bundles/main-41ed28b7209647dbe68b.js"
+    }
+  },
+  "chunks": {
+    "main": [
+      "main-41ed28b7209647dbe68b.js"
+    ]
+  }
+}
