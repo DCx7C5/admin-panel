@@ -1,51 +1,79 @@
 from __future__ import annotations
 
-from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
     CharField,
     ForeignKey,
     CASCADE,
     BooleanField,
+    DateTimeField,
     GenericIPAddressField,
-    DateTimeField, QuerySet, Manager, URLField,
+    Model,
+    QuerySet,
+    Manager,
 )
 
-
-CustomUser = get_user_model()
-
-
-class SidebarItemManager(Manager):
-    async def get_queryset(self):
-        return await super().get_queryset().filter(context='SB')
+from asshatsuite import settings
 
 
-class MenuItem(Model):
+User = settings.AUTH_USER_MODEL
 
+
+class EndPointManager(Manager):
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset()
+
+
+class Endpoint(Model):
+    segment = CharField(
+        max_length=32,
+        verbose_name='path segment',
+    )
     name = CharField(
-        max_length=50,
+        max_length=255,
         unique=True,
-        editable=True,
-        null=False,
     )
-    path = URLField(
-        verbose_name='url path',
-        default='/',
-        editable=True,
+    parent = ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=CASCADE,
+        related_name='children',
     )
-    context = CharField(
-        max_length=2,
-        choices=[('SB', 'Sidebar'), ],
-        null=False,
-        editable=True,
-    )
-    objects = Manager()
-    sidebar_items = SidebarItemManager()
+
+    def __str__(self):
+        return self.name
+
+    def is_root(self):
+        return not self.parent
+
+    def has_children(self):
+        return self.children.exists()
+
+    def get_ancestors(self):
+        ancestors = [self]
+        current_parent = self.parent
+
+        while current_parent:
+            ancestors.insert(0, current_parent)
+            current_parent = current_parent.parent
+
+        return ancestors
+
+    def get_descendants(self):
+        descendants = []
+
+        for child in self.children.all():
+            descendants.append(child)
+            descendants.extend(child.get_descendants())
+
+        return descendants
+
+    objects = Manager
 
     class Meta:
-        verbose_name = 'menu item'
-        verbose_name_plural = 'menu items'
-        managed: True
+        app_label = 'core'
+        verbose_name = 'url endpoint'
+        verbose_name_plural = 'url_endpoints'
 
 
 class HostManager(Manager):
@@ -70,15 +98,17 @@ class Host(Model):
         verbose_name='host ip address',
         unique=True,
         editable=True,
+        blank=False,
     )
     name = CharField(
         verbose_name='hostname',
         max_length=253,
         unique=True,
         editable=True,
+        blank=True,
     )
     owner = ForeignKey(
-        to=CustomUser,
+        to=User,
         on_delete=CASCADE,
     )
     remote = BooleanField(
@@ -99,7 +129,7 @@ class Host(Model):
     )
 
     class Meta:
-        managed = True
+        app_label = 'core'
         verbose_name = 'host'
         verbose_name_plural = 'hosts'
 

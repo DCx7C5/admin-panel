@@ -3,7 +3,7 @@ from django.contrib.admin import ModelAdmin
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 
-from dashboard.models import Host, MenuItem
+from core.models import Host, Endpoint
 
 
 @admin.register(Session)
@@ -18,9 +18,9 @@ class AdminLogAdmin(ModelAdmin):
     ordering = ('-action_time',)
 
 
-@admin.register(MenuItem)
-class MenuItemAdmin(ModelAdmin):
-    list_display = ('id', 'name', 'path', 'context')
+@admin.register(Endpoint)
+class EndpointAdmin(ModelAdmin):
+    list_display = ('id', 'name', 'segment', 'parent_id')
 
 
 @admin.register(Host)

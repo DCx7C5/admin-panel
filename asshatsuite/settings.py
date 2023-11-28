@@ -1,9 +1,6 @@
-from environs import Env
+import os
+from os import environ
 from pathlib import Path
-
-env = Env()
-env.read_env()
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,13 +10,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG')
+DEBUG = bool(environ.get('DEBUG'))
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+SITE_NAME = 'AssHatSuite'
 
 INSTALLED_APPS = [
     # ASGI Server
@@ -31,16 +29,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'webpack_loader',
 
     # Toolbar Plugins/Modules
     'debug_toolbar',
 
     # Plugins/Modules
     'bootstrap5',
-
     # Local modules
     'accounts.apps.AccountConfig',
-    'dashboard.apps.DashboardConfig',
+    'core.apps.CoreConfig',
 ]
 
 
@@ -48,6 +46,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -68,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.all_urls',
             ],
         },
     },
@@ -77,15 +77,21 @@ ASGI_APPLICATION = 'asshatsuite.asgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# no host and port since we communicate over unix socket in docker container
+# DB_HOST and DB_PORT env vars must be None in order to connect over unix socket,
+# which is faster (missing network stack).
+#
+# The DB container forwards host port 5433 to container port 5432 to be able to connect
+# with a database manager without conflicting the port of a potential host postgresql database.
+# django.db.backends.postgresql supports psycopg3 natively.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env.str('DB_NAME'),
-        'USER': env.str('DB_USER'),
-        'PASSWORD': env.str('DB_PASS'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': environ.get('DB_NAME'),
+        'USER': environ.get('DB_USER'),
+        'PASSWORD': environ.get('DB_PASS'),
+        'HOST': environ.get('DB_HOST', None),
+        'PORT': environ.get('DB_PORT', None),
     }
 }
 
@@ -135,14 +141,14 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'core'
+LOGOUT_REDIRECT_URL = 'core'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = "accounts.User"
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -171,31 +177,41 @@ LOGGING = {
             'formatter': 'verbose',
             'encoding': 'utf-8',
         },
-        'rotating_requests_file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'requests.log',
-            'maxBytes': 1024 * 1024 * 100,
-            'backupCount': 10,
-            'encoding': 'utf-8',
-        },
         'console': {
             'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
-        'asshatsuite': {
+
+        '': {
             'handlers': ['rotating_file', 'console'],
             'level': 'DEBUG',
         },
-        'django': {
-            'handlers': ['rotating_requests_file', 'console'],
-            'level': 'INFO',
-        }
     },
 }
 
+SECURE_CONTENT_TYPE_NOSNIFF = False  # temporary
+
+
+WEBPACK_LOADER = {
+  'DEFAULT': {
+    'CACHE': not DEBUG,
+    'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    'POLL_INTERVAL': 0.1,
+    'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+  }
+}
+
+
+
+
+
+
+
+
 
 # enumerate container/host ip
+# adds docker gateway ip to ALLOWED_HOSTS
 if DEBUG:
     import socket
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
