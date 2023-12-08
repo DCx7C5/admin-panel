@@ -1,14 +1,115 @@
 {
   "status": "done",
   "assets": {
-    "main-41ed28b7209647dbe68b.js": {
-      "name": "main-41ed28b7209647dbe68b.js",
-      "path": "/project/js/webpack_bundles/main-41ed28b7209647dbe68b.js"
+    "1e59d2330b4c6deb84b3.ttf?v=4.7.0": {
+      "name": "1e59d2330b4c6deb84b3.ttf?v=4.7.0",
+      "path": "/project/assets/webpack_bundles/1e59d2330b4c6deb84b3.ttf"
+    },
+    "20fd1704ea223900efa9.woff2?v=4.7.0": {
+      "name": "20fd1704ea223900efa9.woff2?v=4.7.0",
+      "path": "/project/assets/webpack_bundles/20fd1704ea223900efa9.woff2"
+    },
+    "64ed46b247405068ca60.woff2?7141511ac37f13e1a387fb9fc6646256": {
+      "name": "64ed46b247405068ca60.woff2?7141511ac37f13e1a387fb9fc6646256",
+      "path": "/project/assets/webpack_bundles/64ed46b247405068ca60.woff2"
+    },
+    "66b7720f4a230f1b0341.woff?7141511ac37f13e1a387fb9fc6646256": {
+      "name": "66b7720f4a230f1b0341.woff?7141511ac37f13e1a387fb9fc6646256",
+      "path": "/project/assets/webpack_bundles/66b7720f4a230f1b0341.woff"
+    },
+    "8b43027f47b20503057d.eot": {
+      "name": "8b43027f47b20503057d.eot",
+      "path": "/project/assets/webpack_bundles/8b43027f47b20503057d.eot"
+    },
+    "8b43027f47b20503057d.eot?v=4.7.0": {
+      "name": "8b43027f47b20503057d.eot?v=4.7.0",
+      "path": "/project/assets/webpack_bundles/8b43027f47b20503057d.eot"
+    },
+    "c1e38fd9e0e74ba58f7a.svg?v=4.7.0": {
+      "name": "c1e38fd9e0e74ba58f7a.svg?v=4.7.0",
+      "path": "/project/assets/webpack_bundles/c1e38fd9e0e74ba58f7a.svg"
+    },
+    "core-15b398446e44b57f72b5.js": {
+      "name": "core-15b398446e44b57f72b5.js",
+      "path": "/project/assets/webpack_bundles/core-15b398446e44b57f72b5.js"
+    },
+    "core-15b398446e44b57f72b5.js.map": {
+      "name": "core-15b398446e44b57f72b5.js.map",
+      "path": "/project/assets/webpack_bundles/core-15b398446e44b57f72b5.js.map"
+    },
+    "core-4b2bada6de74f7141fcf.js": {
+      "name": "core-4b2bada6de74f7141fcf.js",
+      "path": "/project/assets/webpack_bundles/core-4b2bada6de74f7141fcf.js"
+    },
+    "core-4b2bada6de74f7141fcf.js.map": {
+      "name": "core-4b2bada6de74f7141fcf.js.map",
+      "path": "/project/assets/webpack_bundles/core-4b2bada6de74f7141fcf.js.map"
+    },
+    "core.css": {
+      "name": "core.css",
+      "path": "/project/assets/webpack_bundles/core.css"
+    },
+    "core.css.map": {
+      "name": "core.css.map",
+      "path": "/project/assets/webpack_bundles/core.css.map"
+    },
+    "f691f37e57f04c152e23.woff?v=4.7.0": {
+      "name": "f691f37e57f04c152e23.woff?v=4.7.0",
+      "path": "/project/assets/webpack_bundles/f691f37e57f04c152e23.woff"
+    },
+    "login-9e406af3701515e05674.js": {
+      "name": "login-9e406af3701515e05674.js",
+      "path": "/project/assets/webpack_bundles/login-9e406af3701515e05674.js"
+    },
+    "login-9e406af3701515e05674.js.map": {
+      "name": "login-9e406af3701515e05674.js.map",
+      "path": "/project/assets/webpack_bundles/login-9e406af3701515e05674.js.map"
+    },
+    "login.css": {
+      "name": "login.css",
+      "path": "/project/assets/webpack_bundles/login.css"
+    },
+    "login.css.map": {
+      "name": "login.css.map",
+      "path": "/project/assets/webpack_bundles/login.css.map"
+    },
+    "terminal-d1b233f9d04665b1b118.js": {
+      "name": "terminal-d1b233f9d04665b1b118.js",
+      "path": "/project/assets/webpack_bundles/terminal-d1b233f9d04665b1b118.js"
+    },
+    "terminal-d1b233f9d04665b1b118.js.map": {
+      "name": "terminal-d1b233f9d04665b1b118.js.map",
+      "path": "/project/assets/webpack_bundles/terminal-d1b233f9d04665b1b118.js.map"
+    },
+    "terminal-e2369b0c6c2348779d19.js": {
+      "name": "terminal-e2369b0c6c2348779d19.js",
+      "path": "/project/assets/webpack_bundles/terminal-e2369b0c6c2348779d19.js"
+    },
+    "terminal-e2369b0c6c2348779d19.js.map": {
+      "name": "terminal-e2369b0c6c2348779d19.js.map",
+      "path": "/project/assets/webpack_bundles/terminal-e2369b0c6c2348779d19.js.map"
+    },
+    "terminal.css": {
+      "name": "terminal.css",
+      "path": "/project/assets/webpack_bundles/terminal.css"
+    },
+    "terminal.css.map": {
+      "name": "terminal.css.map",
+      "path": "/project/assets/webpack_bundles/terminal.css.map"
     }
   },
   "chunks": {
-    "main": [
-      "main-41ed28b7209647dbe68b.js"
+    "core": [
+      "core.css",
+      "core-15b398446e44b57f72b5.js"
+    ],
+    "login": [
+      "login.css",
+      "login-9e406af3701515e05674.js"
+    ],
+    "terminal": [
+      "terminal.css",
+      "terminal-e2369b0c6c2348779d19.js"
     ]
   }
 }

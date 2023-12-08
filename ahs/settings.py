@@ -17,7 +17,7 @@ DEBUG = bool(environ.get('DEBUG'))
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-SITE_NAME = 'AssHatSuite'
+SITE_NAME = 'AHS'
 
 INSTALLED_APPS = [
     # ASGI Server
@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # webpack loader
     'webpack_loader',
 
     # Toolbar Plugins/Modules
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 
     # Plugins/Modules
     'bootstrap5',
+
     # Local modules
     'accounts.apps.AccountConfig',
     'core.apps.CoreConfig',
@@ -54,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'asshatsuite.urls'
+ROOT_URLCONF = 'ahs.urls'
 
 TEMPLATES = [
     {
@@ -73,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'asshatsuite.asgi.application'
+ASGI_APPLICATION = 'ahs.asgi.application'
 
 
 # Database
@@ -131,7 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'assets']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
@@ -142,7 +144,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'core'
-LOGOUT_REDIRECT_URL = 'core'
+LOGOUT_REDIRECT_URL = 'login'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -171,7 +173,7 @@ LOGGING = {
     'handlers': {
         'rotating_file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'asshat.log',
+            'filename': BASE_DIR / 'ahs.log',
             'maxBytes': 1024 * 1024 * 100,
             'backupCount': 10,
             'formatter': 'verbose',
@@ -192,16 +194,17 @@ LOGGING = {
 
 SECURE_CONTENT_TYPE_NOSNIFF = False  # temporary
 
-
 WEBPACK_LOADER = {
-  'DEFAULT': {
-    'CACHE': not DEBUG,
-    'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-    'POLL_INTERVAL': 0.1,
-    'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
-  }
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'webpack_bundles/',  # must end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+    }
 }
-
 
 
 

@@ -1,5 +1,5 @@
 """
-ASGI config for asshatsuite project.
+ASGI config for AHS project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -17,7 +17,7 @@ from django.urls import path
 
 from core.consumer import TerminalConsumer
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'asshatsuite.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ahs.settings')
 
 django_asgi_app = get_asgi_application()
 

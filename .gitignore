@@ -354,3 +354,4 @@ pyrightconfig.json
 !templates/lib
 node_modules
 */migrations/
+assets/webpack_bundles/
