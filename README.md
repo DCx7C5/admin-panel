@@ -1,4 +1,4 @@
-# AsshatSuite
+# AHS
 
 #### How to start:
 

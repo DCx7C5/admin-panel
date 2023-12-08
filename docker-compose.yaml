@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  web:
+  django:
     build:
       context: .
       dockerfile: Dockerfile.web
@@ -15,12 +15,12 @@ services:
       - .:/project
       - pgsocket:/var/run/postgresql/
     depends_on:
-      - db
+      - postgres
     env_file:
       - .env
     hostname: django.ass
 
-  db:
+  postgres:
     image: postgres:latest
     container_name: postgres
     environment:
@@ -37,10 +37,10 @@ services:
     hostname: postgres.ass
     restart: unless-stopped
 
-  npm:
+  node:
     build:
       context: .
-      dockerfile: Dockerfile.npm
+      dockerfile: Dockerfile.node
     command: bash -c "npx webpack --config webpack.config.js
                                   --mode development 
                                   --watch"
