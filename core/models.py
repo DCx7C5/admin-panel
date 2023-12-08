@@ -12,7 +12,7 @@ from django.db.models import (
     Manager,
 )
 
-from asshatsuite import settings
+from ahs import settings
 
 
 User = settings.AUTH_USER_MODEL

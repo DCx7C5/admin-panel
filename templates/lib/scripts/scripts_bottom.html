@@ -1,7 +1,20 @@
 {% load static bootstrap5 core %}
 {% bootstrap_javascript %}
 {% if user.is_authenticated %}
-    {% ajax_logout_javascript 'accounts/logout/' %}
-    <script src="{% static 'js/base.js' %}"></script>
-    <script type="module" src="{% static 'js/term/terminal.js' %}"></script>
+  <script async type="module" src="{% static 'bundle.js' %}"></script>
+  <script>
+  function logout() {
+    window.localStorage.clear();
+    const form = document.createElement('form');
+    form.action = "{% url 'logout' %}";
+    form.method = 'post';
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrfmiddlewaretoken';
+    csrfInput.value = '{{ csrf_token }}';
+    form.appendChild(csrfInput);
+    document.body.appendChild(form);
+    form.submit();
+  }
+  </script>
 {% endif %}

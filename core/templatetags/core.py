@@ -6,7 +6,7 @@ from django import template
 
 from django.template import Context
 
-from asshatsuite import settings
+from ahs import settings
 
 register = template.Library()
 User = settings.AUTH_USER_MODEL

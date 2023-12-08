@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% load static bootstrap5 i18n core %}
+{% load static i18n core bootstrap5 %}
 {% get_current_language as LANGUAGE_CODE %}
 
 <html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
@@ -12,6 +12,7 @@
 
     {# -- Required meta tags -- #}
     {% block meta_outer %}
+        <link rel="icon" href="{% static 'favicon.ico' %}">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -21,27 +22,23 @@
         {% include 'lib/styles.html' %}
         {% block stylesheets %}{% endblock %}
     {% endblock %}
+    {% block javascript_head %}{% endblock %}
     {% block extra_head %}{% endblock extra_head %}
 </head>
-
 <body class="">
 {# -- ends before body close tag -- #}
 {% block full_body %}
 {# -- ends after footer, all scripts included -- #}
 {% block body %}
 <div id="wrapper" class="container-fluid">
-
   {# -- NavBar -- #}
   {% navbar mode='dark' id='navheader' fixed=True %}
-
   {% block content_wrapper %}
   <main id="page-content-wrapper" class="row flex-nowrap">
-
     {# -- SideBar -- #}
     {% if user.is_authenticated %}
       {% block sidebar %}{% endblock %}
     {% endif %}
-
     {# -- Content -- #}
     <div id="content" class="container">
       <div id="content-header" class="container-fluid tpanel">
@@ -53,17 +50,15 @@
     </div>
   </main>
   {% endblock content_wrapper %}
-
 </div>
 {% endblock body %}
 {# -- Add your scripts and other body elements here -- #}
-{% block javascript %}
+{% block javascript_bottom %}
     {% include 'lib/scripts/scripts_bottom.html' %}
     {% block js %}{% endblock %}
 {% endblock %}
 {% block extra_script %}{% endblock %}
 {% block extra_foot %}{% endblock %}
-
 {% endblock full_body %}
 </body>
 </html>
