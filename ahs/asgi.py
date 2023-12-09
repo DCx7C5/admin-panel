@@ -15,7 +15,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from django.urls import re_path
 
-from core.consumer import TerminalWorker
+from core.consumer import TerminalWorker, CoreConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ahs.settings')
 
@@ -34,7 +34,7 @@ application = ProtocolTypeRouter({
     'websocket': AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter({
-                #re_path(r"ws/(?P<room_name>\w+)/$", CoreConsumer.as_asgi(), name='term'),
+                re_path(r"ws/(?P<room_name>\w+)/$", CoreConsumer.as_asgi()),
             })
         )
     ),

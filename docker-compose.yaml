@@ -4,7 +4,7 @@ services:
   django:
     build:
       context: .
-      dockerfile: Dockerfile.web
+      dockerfile: Dockerfile.django
     container_name: django
     command: bash -c "python manage.py runserver 0.0.0.0:8000"
     ports:
@@ -57,7 +57,6 @@ services:
       dockerfile: Dockerfile.redis
     container_name: redis
     command: redis-server /etc/redis.conf
-    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:

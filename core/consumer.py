@@ -16,7 +16,10 @@ RCL = TypeVar('RCL', bound=RedisChannelLayer)
 MsgVar = Mapping
 
 
-class TerminalWorker(AsyncWebsocketConsumer):
+class CoreConsumer(AsyncWebsocketConsumer): ...
+
+
+class TerminalWorker(AsyncConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
         self.user = None
