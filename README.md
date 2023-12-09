@@ -23,5 +23,5 @@ DJANGO_SETTINGS_MODULE='ahs.settings'
 DB_BACKUP_ON_SHUTDOWN=1
 DB_RESTORE_ON_START=0
 ```
-###### - leave DB_HOST & DB_PORT empty in order to connect django & postgres container over a UNIX socket connection. 
-###### - IDE or Database Tool connects to postgres on localhost:5433
+###### - leave DB_HOST & DB_PORT empty to connect django & postgres container over a UNIX socket connection. 
+###### - IDE or Database Tool connects to postgresql DB on localhost:5433
