@@ -4,18 +4,12 @@ set -o errexit
 set -o nounset
 
 INIT_FAILED=0
-db_dump_file="db-ahs_dev.dump"
+db_dump_file="db-$DB_NAME.dump"
 
 # ANSI color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
-
-# Function to drop a shell
-drop_shell() {
-  echo -e "${RED}Dropping into an interactive shell...${NC}"
-  exec /bin/bash
-}
 
 check_sql_db() {
   # Check for PostgreSQL database
@@ -30,7 +24,7 @@ check_sql_db() {
 
 check_redis_db() {
   # Check for redis channel layer database
-  if [ ! -f "/var/run/redis/redis.sock" ]; then
+  if [ ! -S "/tmp/redis/redis.sock" ]; then
     echo -e "${RED}Redis channel layer database is missing...${NC}"
     INIT_FAILED=1
   else
@@ -57,9 +51,15 @@ restore_database_dump() {
   fi
 }
 
+install_and_update_requirements() {
+  pip install --user --no-deps --no-cache-dir -U pip
+  pip install --user --no-deps --no-cache-dir -r /project/requirements.txt
+}
+
 shutdown_hook() {
   make_database_dump
   echo -e "${GREEN}Shutting down ${RED}DJANGO${GREEN} docker container...${NC}"
+  sleep 2
 }
 
 trap 'shutdown_hook' SIGTERM SIGINT
@@ -72,9 +72,6 @@ else
   echo -e "${GREEN}Project root found!${NC}"
 fi
 
-check_redis_db
-check_sql_db
-
 # Check for changes in requirements.txt
 if [ ! -f /project/requirements.txt ]; then
   echo -e "${RED}requirements.txt is missing...${NC}"
@@ -83,23 +80,28 @@ else
   if [ ! -f /home/user/req.bkp ]; then
     echo -e "${GREEN}Container first start detected...installing modules!${NC}"
     cp /project/requirements.txt /home/user/req.bkp
-    pip install --user --no-deps --no-cache-dir -r /project/requirements.txt
-    check_sql_db
-    check_redis_db
+    install_and_update_requirements
   elif ! cmp -s /home/user/req.bkp /project/requirements.txt; then
     echo -e "${GREEN}Changes in requirements.txt detected...updating modules!${NC}"
-    pip install --user --no-deps --no-cache-dir -r /project/requirements.txt
+    install_and_update_requirements
     cp /project/requirements.txt /home/user/req.bkp
-    check_sql_db
-    check_redis_db
   fi
 fi
 
+check_redis_db
+check_sql_db
+
 if [ $INIT_FAILED -eq 1 ]; then
-  drop_shell
+  echo -e "${RED}Dropping into an interactive shell...${NC}"
+  exec /bin/bash
 fi
 
+echo -e "${GREEN}Creating migrations if needed...${NC}"
+python manage.py makemigrations
+echo -e "${GREEN}Migrate database if possible...${NC}"
+python manage.py migrate
 echo -e "${GREEN}Initialisation successfull!${NC}"
+
 "${@}" &
 wait $!
 shutdown_hook

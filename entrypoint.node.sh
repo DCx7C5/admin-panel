@@ -10,6 +10,7 @@ NC='\033[0m'
 
 shutdown_hook() {
   echo -e "${GREEN}Shutting down ${RED}NODE${GREEN} docker container...${NC}"
+  sleep 2
 }
 
 trap 'shutdown_hook' SIGTERM SIGINT

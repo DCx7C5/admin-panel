@@ -6,20 +6,19 @@ services:
       context: .
       dockerfile: Dockerfile.web
     container_name: django
-    command: bash -c "python manage.py makemigrations &&
-                      python manage.py migrate &&
-                      python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
     ports:
-      - "127.0.0.1:8000:8000"
+      - "8000:8000"
     volumes:
       - .:/project
       - pgsocket:/var/run/postgresql/
+      - redissocket:/tmp/redis/
     depends_on:
       - postgres
       - redis
     env_file:
       - .env
-    hostname: django.ass
+    hostname: django.ash
 
   postgres:
     image: postgres:15.5-bookworm
@@ -33,10 +32,9 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
       - pgsocket:/var/run/postgresql/
-      - redissocket:/tmp/redis/
     env_file:
       - .env
-    hostname: postgres.ass
+    hostname: postgres.ash
     restart: unless-stopped
 
   node:
@@ -51,7 +49,7 @@ services:
       - .env
     volumes:
       - .:/project
-    hostname: npm.ass
+    hostname: npm.ash
 
   redis:
     build:
@@ -65,8 +63,7 @@ services:
     volumes:
       - redisdata:/var/lib/redis/
       - redissocket:/tmp/redis/
-    env_file:
-      - .env
+    hostname: redis.ash
 
 volumes:
   pgdata:

@@ -1,6 +1,7 @@
+import json
 import logging
 from functools import partial, update_wrapper
-from typing import Tuple, TypeVar, Mapping, Dict
+from typing import Tuple, TypeVar, Mapping, Dict, Any, Coroutine
 
 from channels.consumer import get_handler_name, AsyncConsumer
 from channels.exceptions import InvalidChannelLayerError, DenyConnection, AcceptConnection
@@ -9,102 +10,46 @@ from channels.layers import get_channel_layer
 from channels.utils import await_many_dispatch
 from channels_redis.core import RedisChannelLayer
 
-
 logger = logging.getLogger(__name__)
-
 
 RCL = TypeVar('RCL', bound=RedisChannelLayer)
 MsgVar = Mapping
 
 
-class SocketMessage:
-    __slots__ = ()
+class TerminalWorker(AsyncWebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.user = None
+        self.room_group_name = None
+        self.room_name = None
 
+    async def connect(self):
+        self.user = self.scope['user']
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_group_name = f"chat_{self.room_name}"
 
-class TerminalCommand(SocketMessage):
-    __slots__ = ()
+        # Join room group
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
+        await self.accept()
 
-class TerminalOutput(SocketMessage):
-    __slots__ = ()
+    async def disconnect(self, close_code):
+        # Leave room group
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
+    # Receive message from WebSocket
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
 
-class TerminalConsumer:
+        # Send message to room group
+        await self.channel_layer.group_send(
+            self.room_group_name, {"type": "chat.message", "message": message}
+        )
 
-    __slots__ = ('scope', 'redis_layer', 'ch_name', 'ch_recv_func',
-                 'ch_send_func', 'groups', '_user', )
+    # Receive message from room group
+    async def chat_message(self, event):
+        message = event["message"]
 
-    @property
-    def user(self):
-        return self._user
-
-    async def __call__(self, scope, receive, send):
-        """
-        Dispatcher
-        """
-        self.scope = scope
-
-        self.redis_layer: RCL = get_channel_layer('terminal')
-
-        self.ch_name = await self.redis_layer.new_channel()
-
-        self.ch_send_func = send
-
-        self.ch_recv_func = partial(self.redis_layer.receive, self.ch_name
-                                    )
-        await await_many_dispatch([receive, self.ch_recv_func], self.dispatch)
-
-    async def dispatch(self, message):
-        handler = getattr(self, get_handler_name(message), None)
-        if handler:
-            await handler(message)
-        else:
-            raise ValueError("No handler for message type %s" % message["type"])
-
-    async def send(self, message):
-        await self.ch_send_func(message)
-
-    async def on_connection_made(self):
-        logger.debug('client wants to connect...')
-        self._user = self.scope['user']
-        try:
-            for group in self.groups:
-                await self.redis_layer.group_add(group, self.ch_name)
-        except AttributeError:
-            raise InvalidChannelLayerError(
-                "BACKEND is unconfigured or doesn't support groups"
-            )
-        try:
-            await self.accept_connection()
-        except AcceptConnection:
-            await self.accept_connection()
-        except DenyConnection:
-            await self.close()
-
-    async def accept_connection(self, subprotocol=None):
-        logger.debug('accepting socket connection')
-        await self.send({"type": "websocket.accept", "subprotocol": subprotocol})
-
-    async def on_data_received(self):
-        pass
-
-    @classmethod
-    def as_asgi(cls, **initkwargs):
-        """
-        Return an ASGI v3 single callable that instantiates a consumer instance
-        per scope. Similar in purpose to Django's as_view().
-
-        initkwargs will be used to instantiate the consumer instance.
-        """
-
-        async def app(scope, receive, send):
-            consumer = cls(**initkwargs)
-            return await consumer(scope, receive, send)
-
-        app.consumer_class = cls
-        app.consumer_initkwargs = initkwargs
-
-        # take name and docstring from class
-        update_wrapper(app, cls, updated=())
-        return app
-
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({"message": message}))

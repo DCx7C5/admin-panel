@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'channels',
     # webpack loader
     'webpack_loader',
 
@@ -210,7 +212,8 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": ["/var/run/redis/redis.sock"],
+            "hosts": ["/tmp/redis/redis.sock"],
+            "symmetric_encryption_keys": [SECRET_KEY],
         },
     },
 }

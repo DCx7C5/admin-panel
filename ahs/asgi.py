@@ -10,9 +10,10 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 import os
 
 from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, ChannelNameRouter
+from channels.routing import ProtocolTypeRouter, ChannelNameRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
+from django.urls import re_path
 
 from core.consumer import TerminalWorker
 
@@ -26,7 +27,14 @@ application = ProtocolTypeRouter({
     'channel': AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             ChannelNameRouter({
-                'terminal': TerminalWorker,
+                'terminal': TerminalWorker.as_asgi(),
+            })
+        )
+    ),
+    'websocket': AllowedHostsOriginValidator(
+        AuthMiddlewareStack(
+            URLRouter({
+                #re_path(r"ws/(?P<room_name>\w+)/$", CoreConsumer.as_asgi(), name='term'),
             })
         )
     ),
