@@ -16,7 +16,8 @@ if [ ! -f manage.py ]; then
 else
   echo -e "${GREEN}Project root found!${NC}"
   # Install package.json
-  npm -D install package.json
+  npm -D install
+  npm audit fix
 fi
 
 echo -e "${GREEN}Initialisation successfull!${NC}"
