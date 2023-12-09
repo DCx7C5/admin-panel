@@ -6,7 +6,13 @@ set -o nounset
 # ANSI color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-NC='\033[0m'  # No Color
+NC='\033[0m'
+
+shutdown_hook() {
+  echo -e "${GREEN}Shutting down ${RED}NODE${GREEN} docker container...${NC}"
+}
+
+trap 'shutdown_hook' SIGTERM SIGINT
 
 # Check Django project dir is mounted
 if [ ! -f manage.py ]; then
@@ -17,8 +23,9 @@ else
   echo -e "${GREEN}Project root found!${NC}"
   # Install package.json
   npm -D install
-  npm audit fix
 fi
 
 echo -e "${GREEN}Initialisation successfull!${NC}"
-exec "$@"
+"${@}" &
+wait $!
+shutdown_hook

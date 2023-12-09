@@ -355,3 +355,4 @@ pyrightconfig.json
 node_modules
 */migrations/
 assets/webpack_bundles/
+db-ahs_dev.dump
