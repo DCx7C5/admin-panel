@@ -28,6 +28,17 @@ check_sql_db() {
   fi
 }
 
+check_redis_db() {
+  # Check for redis channel layer database
+  if [ ! -f "/var/run/redis/redis.sock" ]; then
+    echo -e "${RED}Redis channel layer database is missing...${NC}"
+    INIT_FAILED=1
+  else
+    echo -e "${GREEN}Redis channel layer database found!${NC}"
+    INIT_FAILED=0
+  fi
+}
+
 make_database_dump() {
   if [ "$DB_BACKUP_ON_SHUTDOWN" -eq 1 ]; then
     echo -e "${GREEN}Creating database backup...${NC}"
@@ -61,6 +72,7 @@ else
   echo -e "${GREEN}Project root found!${NC}"
 fi
 
+check_redis_db
 check_sql_db
 
 # Check for changes in requirements.txt
@@ -73,11 +85,13 @@ else
     cp /project/requirements.txt /home/user/req.bkp
     pip install --user --no-deps --no-cache-dir -r /project/requirements.txt
     check_sql_db
+    check_redis_db
   elif ! cmp -s /home/user/req.bkp /project/requirements.txt; then
     echo -e "${GREEN}Changes in requirements.txt detected...updating modules!${NC}"
     pip install --user --no-deps --no-cache-dir -r /project/requirements.txt
     cp /project/requirements.txt /home/user/req.bkp
     check_sql_db
+    check_redis_db
   fi
 fi
 

@@ -16,6 +16,7 @@ services:
       - pgsocket:/var/run/postgresql/
     depends_on:
       - postgres
+      - redis
     env_file:
       - .env
     hostname: django.ass
@@ -32,6 +33,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
       - pgsocket:/var/run/postgresql/
+      - redissocket:/tmp/redis/
     env_file:
       - .env
     hostname: postgres.ass
@@ -44,14 +46,30 @@ services:
     command: bash -c "npx webpack --config webpack.config.js
                                   --mode development 
                                   --watch"
-    container_name: npm
+    container_name: node
     env_file:
       - .env
     volumes:
       - .:/project
     hostname: npm.ass
 
+  redis:
+    build:
+      context: .
+      dockerfile: Dockerfile.redis
+    container_name: redis
+    command: redis-server /etc/redis.conf
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/var/lib/redis/
+      - redissocket:/tmp/redis/
+    env_file:
+      - .env
 
 volumes:
   pgdata:
   pgsocket:
+  redissocket:
+  redisdata:

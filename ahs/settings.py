@@ -206,12 +206,14 @@ WEBPACK_LOADER = {
     }
 }
 
-
-
-
-
-
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["/var/run/redis/redis.sock"],
+        },
+    },
+}
 
 # enumerate container/host ip
 # adds docker gateway ip to ALLOWED_HOSTS
