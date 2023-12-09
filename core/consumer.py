@@ -29,12 +29,14 @@ class TerminalOutput(SocketMessage):
     __slots__ = ()
 
 
-
-
 class TerminalConsumer:
 
     __slots__ = ('scope', 'redis_layer', 'ch_name', 'ch_recv_func',
-                 'ch_send_func', 'groups',)
+                 'ch_send_func', 'groups', '_user', )
+
+    @property
+    def user(self):
+        return self._user
 
     async def __call__(self, scope, receive, send):
         """
@@ -64,6 +66,7 @@ class TerminalConsumer:
 
     async def on_connection_made(self):
         logger.debug('client wants to connect...')
+        self._user = self.scope['user']
         try:
             for group in self.groups:
                 await self.redis_layer.group_add(group, self.ch_name)
@@ -72,9 +75,9 @@ class TerminalConsumer:
                 "BACKEND is unconfigured or doesn't support groups"
             )
         try:
-            await self.connect()
+            await self.accept_connection()
         except AcceptConnection:
-            await self.accept()
+            await self.accept_connection()
         except DenyConnection:
             await self.close()
 

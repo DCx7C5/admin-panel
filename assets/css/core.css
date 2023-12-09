@@ -48,6 +48,29 @@ body {
     height: 100%;
     padding: 0;
     position: relative;
-    background-color: #2eb210;
-
+    background-color: white;
+}
+#terminal-container {
+    padding: 0 0 0 0;
+    margin-top: auto;
+    overflow: auto;
+    min-height: auto;
+    flex: 1 1 auto; /* resizable */
+}
+#terminal-splitter {
+    background-color: #212529;
+    cursor: row-resize;
+    height: .7rem;
+}
+#terminal-taskbar {
+    background-color: #666666;
+}
+#terminal-output {
+    background-color: #1e1f22;
+}
+.tpanel {
+    margin-left: 0;
+}
+.bottom-item {
+    margin-top: auto;
 }

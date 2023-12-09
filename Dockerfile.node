@@ -15,4 +15,9 @@ RUN groupadd user && usermod -a -G user node
 
 WORKDIR /project
 
+COPY entrypoint.node.sh /entrypoint.node.sh
+RUN chmod +x /entrypoint.node.sh && chown 1000:1000 /entrypoint.node.sh
+
 USER node:1000:1000
+
+ENTRYPOINT ["/entrypoint.node.sh"]

@@ -7,13 +7,15 @@
       class="sidebartoggle btn iconbtn"
       aria-label="Mute"
       type="button"
-    ><i class="bi bi-list" style="color: white"></i></button>
+      id="nav-sb-btn"
+    ><i class="bi bi-list"></i></button>
     <button
       class="btn iconbtn"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#terminal"
+      data-bs-target="#terminal-container"
       aria-label="Mute"
+      id="nav-term-btn"
     ><i class="bi bi-terminal"></i></button>
     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
       {% if user.is_authenticated %}

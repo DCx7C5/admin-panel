@@ -11,7 +11,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "assets/webpack_bundles/"),
-    filename: "[name]-[chunkhash].js",
+    filename: "[name].js",
   },
 
   devtool: "source-map", // Optional: Choose an appropriate devtool for your needs
@@ -19,7 +19,7 @@ module.exports = {
     hot: true,
     historyApiFallback: true,
     host: "localhost",
-    port: 3000,
+    port: 8000,
     // Allow CORS requests from the Django dev server domain:
     headers: { "Access-Control-Allow-Origin": "*" },
   },

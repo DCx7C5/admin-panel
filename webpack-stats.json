@@ -29,22 +29,6 @@
       "name": "c1e38fd9e0e74ba58f7a.svg?v=4.7.0",
       "path": "/project/assets/webpack_bundles/c1e38fd9e0e74ba58f7a.svg"
     },
-    "core-15b398446e44b57f72b5.js": {
-      "name": "core-15b398446e44b57f72b5.js",
-      "path": "/project/assets/webpack_bundles/core-15b398446e44b57f72b5.js"
-    },
-    "core-15b398446e44b57f72b5.js.map": {
-      "name": "core-15b398446e44b57f72b5.js.map",
-      "path": "/project/assets/webpack_bundles/core-15b398446e44b57f72b5.js.map"
-    },
-    "core-4b2bada6de74f7141fcf.js": {
-      "name": "core-4b2bada6de74f7141fcf.js",
-      "path": "/project/assets/webpack_bundles/core-4b2bada6de74f7141fcf.js"
-    },
-    "core-4b2bada6de74f7141fcf.js.map": {
-      "name": "core-4b2bada6de74f7141fcf.js.map",
-      "path": "/project/assets/webpack_bundles/core-4b2bada6de74f7141fcf.js.map"
-    },
     "core.css": {
       "name": "core.css",
       "path": "/project/assets/webpack_bundles/core.css"
@@ -53,17 +37,17 @@
       "name": "core.css.map",
       "path": "/project/assets/webpack_bundles/core.css.map"
     },
+    "core.js": {
+      "name": "core.js",
+      "path": "/project/assets/webpack_bundles/core.js"
+    },
+    "core.js.map": {
+      "name": "core.js.map",
+      "path": "/project/assets/webpack_bundles/core.js.map"
+    },
     "f691f37e57f04c152e23.woff?v=4.7.0": {
       "name": "f691f37e57f04c152e23.woff?v=4.7.0",
       "path": "/project/assets/webpack_bundles/f691f37e57f04c152e23.woff"
-    },
-    "login-9e406af3701515e05674.js": {
-      "name": "login-9e406af3701515e05674.js",
-      "path": "/project/assets/webpack_bundles/login-9e406af3701515e05674.js"
-    },
-    "login-9e406af3701515e05674.js.map": {
-      "name": "login-9e406af3701515e05674.js.map",
-      "path": "/project/assets/webpack_bundles/login-9e406af3701515e05674.js.map"
     },
     "login.css": {
       "name": "login.css",
@@ -73,43 +57,34 @@
       "name": "login.css.map",
       "path": "/project/assets/webpack_bundles/login.css.map"
     },
-    "terminal-d1b233f9d04665b1b118.js": {
-      "name": "terminal-d1b233f9d04665b1b118.js",
-      "path": "/project/assets/webpack_bundles/terminal-d1b233f9d04665b1b118.js"
+    "login.js": {
+      "name": "login.js",
+      "path": "/project/assets/webpack_bundles/login.js"
     },
-    "terminal-d1b233f9d04665b1b118.js.map": {
-      "name": "terminal-d1b233f9d04665b1b118.js.map",
-      "path": "/project/assets/webpack_bundles/terminal-d1b233f9d04665b1b118.js.map"
+    "login.js.map": {
+      "name": "login.js.map",
+      "path": "/project/assets/webpack_bundles/login.js.map"
     },
-    "terminal-e2369b0c6c2348779d19.js": {
-      "name": "terminal-e2369b0c6c2348779d19.js",
-      "path": "/project/assets/webpack_bundles/terminal-e2369b0c6c2348779d19.js"
+    "terminal.js": {
+      "name": "terminal.js",
+      "path": "/project/assets/webpack_bundles/terminal.js"
     },
-    "terminal-e2369b0c6c2348779d19.js.map": {
-      "name": "terminal-e2369b0c6c2348779d19.js.map",
-      "path": "/project/assets/webpack_bundles/terminal-e2369b0c6c2348779d19.js.map"
-    },
-    "terminal.css": {
-      "name": "terminal.css",
-      "path": "/project/assets/webpack_bundles/terminal.css"
-    },
-    "terminal.css.map": {
-      "name": "terminal.css.map",
-      "path": "/project/assets/webpack_bundles/terminal.css.map"
+    "terminal.js.map": {
+      "name": "terminal.js.map",
+      "path": "/project/assets/webpack_bundles/terminal.js.map"
     }
   },
   "chunks": {
     "core": [
       "core.css",
-      "core-15b398446e44b57f72b5.js"
+      "core.js"
     ],
     "login": [
       "login.css",
-      "login-9e406af3701515e05674.js"
+      "login.js"
     ],
     "terminal": [
-      "terminal.css",
-      "terminal-e2369b0c6c2348779d19.js"
+      "terminal.js"
     ]
   }
 }
