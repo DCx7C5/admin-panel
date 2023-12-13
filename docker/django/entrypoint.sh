@@ -13,7 +13,7 @@ NC='\033[0m'
 
 check_sql_db() {
   # Check for PostgreSQL database
-  if [ ! -f "/var/run/postgresql/.s.PGSQL.5432.lock" ]; then
+  if [ ! -S "/var/run/postgresql/.s.PGSQL.5432" ]; then
     echo -e "${RED}PostgreSQL database is missing...${NC}"
     INIT_FAILED=1
   else

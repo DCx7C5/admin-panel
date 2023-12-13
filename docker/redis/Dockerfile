@@ -1,4 +1,4 @@
-FROM node:latest
+FROM redis:bookworm
 
 RUN apt-get update && \
     apt-get -y --no-install-recommends install \
@@ -6,18 +6,16 @@ RUN apt-get update && \
       build-essential && \
     apt-get autoremove -y && \
     apt-get clean && \
-    npm install -g npm && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 ENV TERM xterm-256color
 
-RUN groupadd user && usermod -a -G user node
+RUN groupadd user && usermod -a -G user redis
 
 WORKDIR /project
 
-COPY entrypoint.node.sh /entrypoint.node.sh
-RUN chmod +x /entrypoint.node.sh && chown 1000:1000 /entrypoint.node.sh
+COPY ./docker/redis/redis.conf /etc/redis.conf
+RUN chown 999:1000 /etc/redis.conf
+RUN mkdir -p /tmp/redis && chown -R 999:1000 /tmp/redis
 
-USER node:1000:1000
-
-ENTRYPOINT ["/entrypoint.node.sh"]
+USER redis:999:1000

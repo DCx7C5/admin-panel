@@ -4,7 +4,7 @@ services:
   django:
     build:
       context: .
-      dockerfile: Dockerfile.django
+      dockerfile: ./docker/django/Dockerfile
     container_name: django
     command: bash -c "python manage.py runserver 0.0.0.0:8000"
     ports:
@@ -35,26 +35,23 @@ services:
     env_file:
       - .env
     hostname: postgres.ash
-    restart: unless-stopped
 
   node:
     build:
       context: .
-      dockerfile: Dockerfile.node
-    command: bash -c "npx webpack --config webpack.config.js
-                                  --mode development 
-                                  --watch"
+      dockerfile: ./docker/node/Dockerfile
+    command: bash -c "npx webpack --config webpack.config.js --mode development --watch"
     container_name: node
     env_file:
       - .env
     volumes:
       - .:/project
-    hostname: npm.ash
+    hostname: node.ash
 
   redis:
     build:
       context: .
-      dockerfile: Dockerfile.redis
+      dockerfile: ./docker/redis/Dockerfile
     container_name: redis
     command: redis-server /etc/redis.conf
     ports:

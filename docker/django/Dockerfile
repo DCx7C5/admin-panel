@@ -19,9 +19,9 @@ ENV TERM xterm-256color
 
 WORKDIR /project
 
-COPY entrypoint.django.sh /entrypoint.django.sh
-RUN chmod +x /entrypoint.django.sh && chown 1000:1000 /entrypoint.django.sh
+COPY ./docker/django/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh && chown 1000:1000 /entrypoint.sh
 
 USER user:1000:1000
 
-ENTRYPOINT ["/entrypoint.django.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
