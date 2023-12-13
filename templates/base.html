@@ -1,30 +1,26 @@
-{% load webpack_static from webpack_loader %}
 <!DOCTYPE html>
-
+{% load webpack_static render_bundle from webpack_loader %}
 {% load static i18n core bootstrap5 %}
 {% get_current_language as LANGUAGE_CODE %}
-
 <html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
 <head>
-    {# -- Page title -- #}
-    {% block title_outer %}
-        <title>{% block title %}Website{% endblock %}</title>
-    {% endblock %}
-
-    {# -- Required meta tags -- #}
-    {% block meta_outer %}
-        <link rel="icon" href="{% webpack_static 'favicon.ico' %}">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
-        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    {% endblock %}
-
-    {% block stylesheets_outer %}
-        {% include 'lib/styles.html' %}
-        {% block stylesheets %}{% endblock %}
-    {% endblock %}
-    {% block javascript_head %}{% endblock %}
-    {% block extra_head %}{% endblock extra_head %}
+  {# -- Page title -- #}
+  {% block title_outer %}
+      <title>{% block title %}Website{% endblock %}</title>
+  {% endblock %}
+  {# -- Required meta tags -- #}
+  {% block meta_outer %}
+    <link rel="icon" href="{% webpack_static 'favicon.ico' %}">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  {% endblock %}
+  {% block stylesheets_outer %}
+      {% include 'lib/_styles.html' %}
+      {% block stylesheets %}{% endblock %}
+  {% endblock %}
+  {% block javascript_head %}{% endblock %}
+  {% block extra_head %}{% endblock extra_head %}
 </head>
 <body class="">
   <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -35,28 +31,27 @@
 <div id="wrapper" class="container-fluid">
   {# -- NavBar -- #}
   {% navbar mode='dark' id='navheader' fixed=True %}
-  {% block content_wrapper %}
+  {% block page_content_wrapper %}
   <main id="page-content-wrapper" class="row flex-nowrap">
     {# -- SideBar -- #}
-    {% if user.is_authenticated %}
-      {% block sidebar %}{% endblock %}
-    {% endif %}
+    {% block sidebar %}{% endblock %}
     {# -- Content -- #}
-    <div id="content" class="container">
-      <div id="content-header" class="container-fluid tpanel">
-          {% block content %}cOnTNENT{% endblock %}
+    <div id="content-wrapper" class="container split">
+      <div id="content">
+          {% block content-inner %}{% endblock %}
       </div>
-      {% if user.is_authenticated %}
-          {% include 'lib/_terminal.html' %}
-      {% endif %}
+      <div id="terminal-wrapper">
+        <div id="terminal-taskbar"></div>
+        <div id="terminal-output"></div>
+      </div>
     </div>
   </main>
-  {% endblock content_wrapper %}
+  {% endblock page_content_wrapper %}
 </div>
 {% endblock body %}
 {# -- Add your scripts and other body elements here -- #}
 {% block javascript_bottom %}
-    {% include 'lib/scripts/scripts_bottom.html' %}
+    {% include 'lib/_scripts.html' %}
     {% block js %}{% endblock %}
 {% endblock %}
 {% block extra_script %}{% endblock %}

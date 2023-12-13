@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% load core %}
 {% block title %}Dashboard{% endblock %}
-{% block sidebar %}{% include 'lib/sidebar.html' %}{% endblock %}
+{% block sidebar %}{% include 'lib/_sidebar.html' %}{% endblock %}
 {% block page_name %}Dashboard{% endblock %}
-{% block content %}
-    {% current_datetime '%Y-%m-%d %H:%M:%S' %}
-    {{ user.is_authenticated }}
+{% block content-inner %}
+  <div id="dashboard"></div>
 {% endblock %}
