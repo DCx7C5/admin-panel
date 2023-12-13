@@ -1,59 +1,16 @@
 import uuid
-
-from django.contrib.auth.base_user import BaseUserManager
+from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
-        """
-        Creates and saves a User with the given email and password.
-        """
-        if not email:
-            raise ValueError('Users must have an email address')
-
-        user = self.model(
-            email=self.normalize_email(email),
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_staffuser(self, email, password):
-        """
-        Creates and saves a staff user with the given email and password.
-        """
-        user = self.create_user(
-            email,
-            password=password,
-        )
-        user.staff = True
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, password):
-        """
-        Creates and saves a superuser with the given email and password.
-        """
-        user = self.create_user(
-            email,
-            password=password,
-        )
-        user.staff = True
-        user.admin = True
-        user.save(using=self._db)
-        return user
-
-
-class User(AbstractUser):
+class AHSUser(AbstractUser):
     """
     Simple subclass for custom field extensions of :class: User
     """
 
     date_modified = models.DateTimeField(
-        help_text='Last time the user profile was updated',
+        help_text=_('Last time the user profile was updated'),
         verbose_name='date modified',
         auto_now=True,
         blank=False,
@@ -63,16 +20,19 @@ class User(AbstractUser):
     uid = models.UUIDField(
         unique=True,
         default=uuid.uuid4,
-        editable=False,
         blank=False,
         null=False,
         db_index=True,
+        verbose_name=_('User UUID')
     )
 
     image = models.ImageField(
-        verbose_name='profile picture'
+        verbose_name=_('profile picture'),
+        upload_to='pfps',
+        default='pfps/default.jpg',
+        blank=True,
     )
 
     class Meta:
-        verbose_name = 'user'
-        verbose_name_plural = 'users'
+        verbose_name = _('AHS user')
+        verbose_name_plural = _('AHS users')

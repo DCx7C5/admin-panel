@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'bootstrap5',
 
     # Local modules
-    'accounts.apps.AccountConfig',
+    'accounts.apps.AccountsConfig',
     'core.apps.CoreConfig',
 ]
 
@@ -152,13 +152,14 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 
-AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "accounts.AHSUser"
 
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
 MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 LOGGING = {
     'version': 1,
