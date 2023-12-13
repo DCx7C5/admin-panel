@@ -1,11 +1,7 @@
-from django.urls import path
-from django.views.generic import TemplateView
-
-from core.consumer import TerminalWorker
-from core.views import DashboardView
-
+from django.urls import path, re_path
+from core.views import DashboardView, hosts_list, ApiHostsView
 
 urlpatterns = [
     path('', DashboardView.as_view(), name='core'),
-    path('terminal/', TerminalWorker.as_asgi(), name='terminal'),
+    re_path(r'^api/hosts/$', ApiHostsView.as_view(), name='hosts_list'),
 ]

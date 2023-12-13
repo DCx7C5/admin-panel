@@ -35,11 +35,25 @@ DB_RESTORE_ON_START=0
 
 <br>
 
+#### Start docker-compose 
+```bash
+
+docker compose \
+  --env-file /path/to/ahs/.env \
+  -f /path/to/ahs/docker-compose.yaml \
+  -p ahs up \
+  -d \
+  --build
+
+```
+
+
 #### Create django admin user 
 ```bash
 # start a terminal in django docker container and create ahs admin user
 
 user@django:/project$ python manage.py createsuperuser
+
 # Output:
 Username: ...
 Email Address: ...
@@ -49,3 +63,5 @@ Email Address: ...
 <br>
 
 ###### Project is a admin user Cyber Management Suite, intended to run FAST on a desktop host. however... it will be fucking fast.
+
+<br>

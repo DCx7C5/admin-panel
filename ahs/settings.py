@@ -30,7 +30,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # django channels
     'channels',
+    'channels_redis',
+    'rest_framework',
+    'adrf',
+    'corsheaders',
+
     # webpack loader
     'webpack_loader',
 
@@ -50,7 +56,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -136,8 +142,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'assets']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 
 # Default primary key field type
@@ -184,18 +188,23 @@ LOGGING = {
         },
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
         },
     },
     'loggers': {
-
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         '': {
-            'handlers': ['rotating_file', 'console'],
-            'level': 'DEBUG',
+            'handlers': ['rotating_file'],
+            'level': 'INFO',
+            'propagate': True,
         },
     },
 }
 
-SECURE_CONTENT_TYPE_NOSNIFF = False  # temporary
 
 WEBPACK_LOADER = {
     'DEFAULT': {
@@ -213,8 +222,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": ["/tmp/redis/redis.sock"],
-            "symmetric_encryption_keys": [SECRET_KEY],
+            "hosts": ["unix:///tmp/redis/redis.sock"],
         },
     },
 }
@@ -227,3 +235,6 @@ if DEBUG:
     ipl = [ip[: ip.rfind(".")] + ".1" for ip in ips]
     INTERNAL_IPS += ipl
     ALLOWED_HOSTS += [hostname, '0.0.0.0'] + ipl
+
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    CORS_ORIGIN_ALLOW_ALL = True

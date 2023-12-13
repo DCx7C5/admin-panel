@@ -1,39 +1,31 @@
-const path = require('path');
-const BundleTracker = require('webpack-bundle-tracker');
+const path = require("path");
+const BundleTracker = require("webpack-bundle-tracker");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   context: __dirname,
   entry: {
-    core: "./assets/js/core",
-    login: "./assets/js/login",
-    terminal: "./assets/js/terminal"
+    base: "./assets/js/index",
+    login: "./assets/js/login"
   },
   output: {
     path: path.resolve(__dirname, "assets/webpack_bundles/"),
-    filename: "[name].js",
+    filename: "[name]-[contenthash].js",
+    clean: true,
   },
-
-  devtool: "source-map", // Optional: Choose an appropriate devtool for your needs
-  devServer: {
-    hot: true,
-    historyApiFallback: true,
-    host: "localhost",
-    port: 8000,
-    // Allow CORS requests from the Django dev server domain:
-    headers: { "Access-Control-Allow-Origin": "*" },
-  },
+  devtool: "source-map",
   plugins: [
     new BundleTracker({ path: __dirname, filename: "webpack-stats.json" }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "[name]-[contenthash].css",
+    }),
   ],
-
 
   module: {
     rules: [
       // we pass the output from babel loader to react-hot loader
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx|js)?$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -49,4 +41,4 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx"],
   },
-}
+};

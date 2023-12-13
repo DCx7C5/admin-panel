@@ -17,7 +17,7 @@ def bs5_js_url(ctx: Context):
     return ctx['']
 
 
-@register.inclusion_tag(filename='lib/navbar/_navbar.html', takes_context=True)
+@register.inclusion_tag(filename='lib/_navbar.html', takes_context=True)
 def navbar(context: Context, mode, id, fixed):
     return {
         'mode': mode,
@@ -25,11 +25,6 @@ def navbar(context: Context, mode, id, fixed):
         'fixed': 'fixed-top' if fixed is True else '',
         'user': context['user'],
     }
-
-
-@register.inclusion_tag(filename='lib/scripts/_ajax_logout.html', takes_context=True)
-def ajax_logout_javascript(context: Context, logout_url: str):
-    return {'logout_url': logout_url, 'csrf_token': context.get('csrf_token')}
 
 
 @register.simple_tag(takes_context=True)

@@ -27,14 +27,14 @@ application = ProtocolTypeRouter({
     'channel': AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             ChannelNameRouter({
-                'terminal': TerminalWorker.as_asgi(),
+                'test': CoreConsumer.as_asgi(),
             })
         )
     ),
     'websocket': AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter({
-                re_path(r"ws/(?P<room_name>\w+)/$", CoreConsumer.as_asgi()),
+                re_path(r"ws/(?P<room_name>\w+)/$", TerminalWorker.as_asgi()),
             })
         )
     ),

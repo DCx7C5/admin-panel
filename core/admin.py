@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import Group
 from django.contrib.sessions.models import Session
 
 from core.models import Host, Endpoint
@@ -25,5 +26,10 @@ class EndpointAdmin(ModelAdmin):
 
 @admin.register(Host)
 class HostAdmin(ModelAdmin):
-    list_display = ('id', 'name', 'address', 'remote', 'created', 'updated')
+    list_display = ('id', 'name', 'address', 'remote', 'created', 'updated', 'owner')
+    ordering = ('id',)
+    list_filter = ('owner', 'created', 'updated')
+    search_fields = ('name', 'address',)
 
+
+admin.site.unregister(Group)

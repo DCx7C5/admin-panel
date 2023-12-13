@@ -85,11 +85,11 @@ class RemoteHostManager(Manager):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().filter(remote=True)
 
-    async def create_rhost(self, address, name, owner, remote=True, *args, **kwargs):
-        return await self.acreate(address=address, name=name, owner=owner, remote=remote, *args, **kwargs)
+    def create_rhost(self, address, name, owner, remote=True, *args, **kwargs):
+        return self.acreate(address=address, name=name, owner=owner, remote=remote, *args, **kwargs)
 
-    async def get_or_create_rhost(self, defaults=None, **kwargs) -> Host:
-        return await self.aget_or_create(defaults, **kwargs)
+    def get_or_create_rhost(self, defaults=None, **kwargs) -> Host:
+        return self.aget_or_create(defaults, **kwargs)
 
 
 class Host(Model):
@@ -97,14 +97,13 @@ class Host(Model):
     address = GenericIPAddressField(
         verbose_name='host ip address',
         unique=True,
-        editable=True,
         blank=False,
+        protocol='IPv4',
     )
     name = CharField(
         verbose_name='hostname',
         max_length=253,
         unique=True,
-        editable=True,
         blank=True,
     )
     owner = ForeignKey(
@@ -113,10 +112,7 @@ class Host(Model):
     )
     remote = BooleanField(
         verbose_name='is remote host',
-        editable=False,
     )
-
-    remote_hosts = RemoteHostManager()
 
     created = DateTimeField(
         verbose_name='created on',
@@ -128,13 +124,16 @@ class Host(Model):
         auto_now=True,
     )
 
+    objects = Manager()
+    remote_hosts = RemoteHostManager()
+
     class Meta:
         app_label = 'core'
         verbose_name = 'host'
         verbose_name_plural = 'hosts'
 
-    async def delete(self, using=None, keep_parents=False):
+    async def adelete(self, using=None, keep_parents=False):
         await super().adelete(using, keep_parents)
 
-    async def save(self, *args, **kwargs):
+    async def asave(self, *args, **kwargs):
         await super().asave(*args, **kwargs)
