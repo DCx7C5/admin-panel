@@ -13,13 +13,18 @@ NC='\033[0m'
 
 check_sql_db() {
   # Check for PostgreSQL database
-  if [ ! -S "/var/run/postgresql/.s.PGSQL.5432" ]; then
-    echo -e "${RED}PostgreSQL database is missing...${NC}"
-    INIT_FAILED=1
-  else
-    echo -e "${GREEN}PostgreSQL database found!${NC}"
-    INIT_FAILED=0
-  fi
+  n=0
+  while [ ! -S "/var/run/postgresql/.s.PGSQL.5432" ] ;
+  do
+    sleep 1
+    ((n+=1))
+    if [ "$n" -eq 10 ]; then
+      echo -e "${RED}PostgreSQL database is missing...${NC}"
+      INIT_FAILED=1
+      exit 1
+    fi
+  done
+  echo -e "${GREEN}PostgreSQL database found!${NC}"
 }
 
 check_redis_db() {
