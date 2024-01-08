@@ -7,6 +7,8 @@ services:
       dockerfile: ./docker/django/Dockerfile
     container_name: django
     command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    tty: true
+    privileged: true
     ports:
       - "8000:8000"
     volumes:
@@ -21,12 +23,13 @@ services:
     hostname: django.ash
 
   postgres:
-    image: postgres:15.5-bookworm
+    image: postgres:alpine3.19
     container_name: postgres
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
+    tty: true
     ports:
       - "5433:5432"
     volumes:
@@ -41,6 +44,7 @@ services:
       context: .
       dockerfile: ./docker/node/Dockerfile
     command: bash -c "npx webpack --config webpack.config.js --mode development --watch"
+    tty: true
     container_name: node
     env_file:
       - .env
@@ -54,6 +58,7 @@ services:
       dockerfile: ./docker/redis/Dockerfile
     container_name: redis
     command: redis-server /etc/redis.conf
+    tty: true
     ports:
       - "6379:6379"
     volumes:

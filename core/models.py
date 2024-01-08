@@ -16,7 +16,7 @@ from ahs import settings
 
 
 User = settings.AUTH_USER_MODEL
-
+# test
 
 class EndPointManager(Manager):
     def get_queryset(self) -> QuerySet:

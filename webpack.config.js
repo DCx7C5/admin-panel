@@ -6,7 +6,9 @@ module.exports = {
   context: __dirname,
   entry: {
     base: "./assets/js/index",
-    login: "./assets/js/login"
+    terminal: "./assets/js/components/terminal/index",
+    dashboard: "./assets/js/pages/Dashboard",
+    login: "./assets/js/login",
   },
   output: {
     path: path.resolve(__dirname, "assets/webpack_bundles/"),
@@ -25,20 +27,20 @@ module.exports = {
     rules: [
       // we pass the output from babel loader to react-hot loader
       {
-        test: /\.(jsx|js)?$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
         },
       },
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        test: /\.s?css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
     ],
   },
 
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".js", ".jsx", ".css", ".scss"],
   },
 };

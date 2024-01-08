@@ -1,17 +1,22 @@
-FROM python:slim-bookworm
+FROM python:3.11-slim-bookworm
+
+RUN apt-get update && apt-get -y --no-install-recommends install wget gnupg && \
+    echo "deb https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" | tee -a '/etc/apt/sources.list.d/pgdg.list' && \
+    wget --quiet -O - "https://www.postgresql.org/media/keys/ACCC4CF8.asc" | apt-key add -
 
 RUN apt-get update && \
     apt-get -y --no-install-recommends install \
-      postgresql-client  \
+      postgresql-client-16 \
       python3-dev \
       gcc \
-      build-essential \
+      build-essential  \
+      wget \
       libpq-dev && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/
 
-RUN useradd -U -m -l -s /bin/bash -u 1000 user
+RUN useradd -U -m -l -s /bin/bash -u 1000 user && usermod -aG sudo user
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

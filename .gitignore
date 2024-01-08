@@ -358,3 +358,5 @@ assets/webpack_bundles/
 db-ahs_dev.dump
 ./webpack-stats.json
 /webpack-stats.json
+.log/
+media/

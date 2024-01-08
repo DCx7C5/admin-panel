@@ -1,10 +1,10 @@
 import logging
 
-
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import Manager
 from django.http import HttpRequest
 
+from api.serializers import AHSUserSerializer
 from core.models import Endpoint
 
 
@@ -38,3 +38,8 @@ def all(request: HttpRequest):
     eps = endpoints(request)
     kwargs['ENDPOINTS'] = eps.pop('ENDPOINTS')
     return kwargs
+
+
+def ahs_serialized_userdata(request: HttpRequest):
+    user_data = AHSUserSerializer(request.user).data
+    return {'AHS_SERIAL_USER': user_data}

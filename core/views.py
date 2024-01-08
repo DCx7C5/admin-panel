@@ -1,30 +1,28 @@
-from django.contrib.auth.decorators import login_required
+import logging
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
-from adrf.decorators import api_view
-from adrf.views import APIView
-from rest_framework import status, permissions
-from rest_framework.response import Response
 
-from core.models import Host
-from core.serializers import HostSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
-    template_name = 'dashboard/index.html'
+    template_name = 'core/index.html'
 
 
-@api_view(['GET', 'POST'])
-async def hosts_list(request) -> Response:
-    serializer = HostSerializer(data=request.data)
-    if serializer.is_valid():
-        return await serializer.adata
+class SettingsView(LoginRequiredMixin, TemplateView):
+    template_name = 'settings/index.html'
 
 
-class ApiHostsView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+class UserProfileView(LoginRequiredMixin, DetailView):
+    http_method_names = ('GET', 'POST')
+    model = get_user_model()
+    template_name = "profile/index.html"
 
-    async def get(self, request) -> Response:
-        serializer = HostSerializer(data=request.data)
-        serializer.is_valid()
-        return Response(await serializer.adata)
+    async def get_context_data(self, **kwargs):
+        ctx = await super().get_context_data(**kwargs)
+        ctx['username'] = self.request.user.username
+        return ctx
+

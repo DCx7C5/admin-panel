@@ -30,14 +30,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django.contrib.admindocs',
+
     # django channels
     'channels',
     'channels_redis',
     'rest_framework',
+    'rest_framework_simplejwt',
     'adrf',
     'corsheaders',
 
     # webpack loader
+    'whitenoise',
     'webpack_loader',
 
     # Toolbar Plugins/Modules
@@ -47,14 +51,16 @@ INSTALLED_APPS = [
     'bootstrap5',
 
     # Local modules
-    'accounts.apps.AccountsConfig',
     'core.apps.CoreConfig',
+    'accounts.apps.AccountsConfig',
+    'api.apps.ApiConfig',
 ]
 
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'ahs.urls'
@@ -78,6 +85,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.all_urls',
+                'core.context_processors.ahs_serialized_userdata',
             ],
         },
     },
@@ -140,7 +148,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/assets/'
 STATICFILES_DIRS = [BASE_DIR / 'assets']
 
 
@@ -149,7 +157,7 @@ STATICFILES_DIRS = [BASE_DIR / 'assets']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'core'
+LOGIN_REDIRECT_URL = 'core:dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 
 LOGIN_URL = 'login'
@@ -198,8 +206,8 @@ LOGGING = {
             'propagate': True,
         },
         '': {
-            'handlers': ['rotating_file'],
-            'level': 'INFO',
+            'handlers': ['rotating_file', 'console'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     },
@@ -226,6 +234,26 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# security related stuff
+SESSION_COOKIE_SECURE = False if DEBUG else True
+CSRF_COOKIE_SECURE = False if DEBUG else True
+CSRF_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_HTTPONLY = False  # False since we will grab it via universal-cookies
+SESSION_COOKIE_HTTPONLY = True
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
 
 # enumerate container/host ip
 # adds docker gateway ip to ALLOWED_HOSTS

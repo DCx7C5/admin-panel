@@ -1,4 +1,6 @@
 import uuid
+
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -36,3 +38,9 @@ class AHSUser(AbstractUser):
     class Meta:
         verbose_name = _('AHS user')
         verbose_name_plural = _('AHS users')
+
+    def get_absolute_url(self):
+        return reverse('core:profile', kwargs={'username': self.username})
+
+    def __str__(self):
+        return self.username

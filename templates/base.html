@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 {% load webpack_static render_bundle from webpack_loader %}
-{% load static i18n core bootstrap5 %}
+{% load static i18n core %}
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
 <head>
+  {% block preload_outer %}
+    {% render_bundle 'base' is_preload=True attrs='async'%}
+    {% block preload %}{% endblock %}  
+  {% endblock preload_outer %}
   {# -- Page title -- #}
   {% block title_outer %}
-      <title>{% block title %}Website{% endblock %}</title>
+    <title>
+      {% block title %}AHS{% endblock %}
+      {% block page_name %}{% endblock %}
+    </title>
   {% endblock %}
   {# -- Required meta tags -- #}
   {% block meta_outer %}
@@ -16,43 +23,47 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   {% endblock %}
   {% block stylesheets_outer %}
-      {% include 'lib/_styles.html' %}
       {% block stylesheets %}{% endblock %}
   {% endblock %}
   {% block javascript_head %}{% endblock %}
   {% block extra_head %}{% endblock extra_head %}
+  {{ AHS_SERIAL_USER|json_script:"user-data" }}
+  {% render_bundle 'base' %}
 </head>
 <body class="">
-  <noscript>You need to enable JavaScript to run this app.</noscript>
 {# -- ends before body close tag -- #}
 {% block full_body %}
 {# -- ends after footer, all scripts included -- #}
 {% block body %}
 <div id="wrapper" class="container-fluid">
   {# -- NavBar -- #}
-  {% navbar mode='dark' id='navheader' fixed=True %}
+  {% navbar id='navheader' fixed=True %}
   {% block page_content_wrapper %}
   <main id="page-content-wrapper" class="row flex-nowrap">
-    {# -- SideBar -- #}
-    {% block sidebar %}{% endblock %}
-    {# -- Content -- #}
-    <div id="content-wrapper" class="container split">
-      <div id="content">
-          {% block content-inner %}{% endblock %}
-      </div>
-      <div id="terminal-wrapper">
-        <div id="terminal-taskbar"></div>
-        <div id="terminal-output"></div>
-      </div>
+  {# -- SideBar -- #}
+  {% block sidebar %}{% include 'lib/_sidebar.html' %}{% endblock %}
+  <div id="content-wrapper-outer" class="container">
+    {% block content_wrapper %}
+    {# -- ContentWrapper (Everything under navbar and right of sidebar)-- #}
+    <div id="content-wrapper" class="container-fluid">
+      {% block content_wrapper_inner %}
+        <div id="content">
+          {% block content_inner %}{% endblock %}
+        </div>
+      {% endblock content_wrapper_inner %}    
     </div>
+    {% endblock content_wrapper %}
+  </div>
   </main>
-  {% endblock page_content_wrapper %}
+  {% endblock %}
 </div>
 {% endblock body %}
-{# -- Add your scripts and other body elements here -- #}
+{# -- scripts and other body elements here -- #}
 {% block javascript_bottom %}
-    {% include 'lib/_scripts.html' %}
-    {% block js %}{% endblock %}
+{% block js %}{% endblock %}
+  {% if user and user.is_superuser %}
+    {% block admin_js %}{% endblock %}
+  {% endif %}  
 {% endblock %}
 {% block extra_script %}{% endblock %}
 {% block extra_foot %}{% endblock %}

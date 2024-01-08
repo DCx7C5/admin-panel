@@ -1,21 +1,25 @@
-<nav id="{{ id }}" class="navbar navbar-expand-lg navbar-{{ mode }} bg-{{ mode }} {{ fixed }}">
+<nav id="{{ id }}" class="navbar navbar-default navbar-static-top {{ fixed }}">
   <div class="container-fluid">
-    <button
-      data-bs-target="#sidebar"
-      data-bs-toggle="collapse"
-      class="sidebartoggle btn iconbtn"
-      aria-label="Mute"
-      type="button"
-      id="nav-sb-btn"
-    ><i class="bi bi-list"></i></button>
-    <button
-      class="btn iconbtn"
-      type="button"
-      id="nav-term-btn"
-    ><i class="bi bi-terminal"></i></button>
+    {% if user.is_authenticated %}
+    <div class="nav-btn-wrapper">
+      <a
+        class="btn iconbtn nav-icon"
+        data-bs-toggle="collapse"
+        data-bs-target="#sidebar-wrapper"
+        role="button"
+        aria-expanded="false"
+        aria-controls="sidebar-wrapper"
+        id="nav-sb-btn"
+      >
+        <i class="bi bi-list nav-icon"></i>
+      </a>
+    </div>
+
+    <div class="nav-btn-wrapper" id="nav-term-btn-wrapper"></div>    
+    {% endif %}
     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
       {% if user.is_authenticated %}
-        <li class="nav-item logout-func-btn" onclick=logout()><a class="nav-link">Log Out</a></li>
+        <li class="nav-item logout-func-btn"><a class="nav-link">Log Out</a></li>
       {% else %}
         <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">SignUp</a></li>

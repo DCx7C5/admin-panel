@@ -1,0 +1,130 @@
+@import "~bootstrap";
+@import '~xterm/css/xterm.css';
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "font-awesome/css/font-awesome.min.css";
+
+$primary-color: #5c00a4;
+$secondary-color: #666666;
+$success-color: #27ae60;
+$info-color: #3498db;
+$warning-color: #f39c12;
+$danger-color: #e74c3c;
+$dark-bg: #2c3e50;
+$light-text: #ecf0f1;
+$frame-bg: #0f0f10;
+$content-bg: #151413;
+$link-color: #4caf50;
+$link-hover-color: #45a049;
+$border-color: #444;
+$terminal-bg: #000;
+
+$sidebar-transition-duration: 0.3s;
+$sidebar-shadow: 0 0 10px rgb(255, 255, 255);
+
+[class^="icon-"] {
+  width: 2rem;
+  height: auto;
+  color: white;
+}
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  padding-top: 2.5rem;
+  color: $light-text;
+  background-color: $dark-bg;
+}
+#navheader {
+  height: 2.5rem;
+  background-color: $frame-bg;
+  display: inline-flex;
+  padding: 0;
+}
+#navheader #nav-sb-btn {
+  padding: 0
+}
+#navheader .nav-icon {
+  color: white;
+  font-size: 1.2rem;
+}
+#sidebar-wrapper {
+  position: fixed;
+  max-width: 15rem;
+  height: calc(100% - 2.5rem);
+  max-height: 100%;
+  min-width: 0;
+  padding: 0;
+  z-index: 1001;
+  transition: width $sidebar-transition-duration ease-in-out,
+              box-shadow $sidebar-transition-duration ease-in-out;
+  background-color: $frame-bg;
+  box-shadow: $sidebar-shadow;
+}
+#sidebar {
+  overflow: hidden;
+  height: 100%;
+}
+
+#page-content-wrapper {
+  height: 100%;
+}
+
+#terminal-output {
+  background-color: $terminal-bg;
+  height: 100%;
+}
+
+#sidebar:hover #sidebar-wrapper {
+  box-shadow: $sidebar-shadow;
+}
+
+
+#sidebar-pfp {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+#page-content-wrapper {
+  height: 100%;
+}
+
+#content-wrapper-outer {
+  padding: 0;
+}
+
+
+#terminal-taskbar {
+  background-color: $secondary-color;
+  height: 2rem;
+}
+
+#terminal-output {
+  background-color: $terminal-bg;
+}
+
+.logout-func-btn {
+  color: white;
+  cursor: pointer;
+}
+
+#content-wrapper {
+}
+
+.tb-btn {
+  margin: 0;
+  padding: 0;
+}
+
+#terminal-taskbar .nav-btn-wrapper {
+  margin-right: 1rem;
+}
+
+#content {
+  min-height: 0;
+  height: 100%;
+  padding: 0.75rem;
+  margin-left: 0;
+  background-color: $content-bg;
+}
+

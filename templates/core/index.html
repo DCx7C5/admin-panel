@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load render_bundle from webpack_loader %}
+{% block preload %}
+  {% render_bundle 'dashboard' is_preload=True attrs='async' %}
+{% endblock %}
+{% block page_name %} - Dashboard{% endblock %}
+{% block extra_head %}
+  {% render_bundle 'dashboard' 'css' %}
+{% endblock %}
+{% block content_wrapper_inner %}
+  {% render_bundle 'dashboard' 'js' %}
+{% endblock %}

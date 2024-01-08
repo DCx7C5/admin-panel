@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin.models import LogEntry
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.contrib.sessions.models import Session
 
 from core.models import Host, Endpoint
@@ -30,6 +30,12 @@ class HostAdmin(ModelAdmin):
     ordering = ('id',)
     list_filter = ('owner', 'created', 'updated')
     search_fields = ('name', 'address',)
+
+
+@admin.register(Permission)
+class PermissionAdmin(ModelAdmin):
+    list_display = ('id', 'name', 'content_type', 'codename')
+    ordering = ('id',)
 
 
 admin.site.unregister(Group)
