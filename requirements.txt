@@ -71,3 +71,4 @@ watchfiles==0.21.0
 websockets==12.0
 whitenoise==6.6.0
 zope.interface==6.1
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
