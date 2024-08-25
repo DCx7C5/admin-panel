@@ -1,32 +1,37 @@
-FROM python:3.11-slim-bookworm
+FROM debian:12-slim
 
-RUN apt-get update && apt-get -y --no-install-recommends install wget gnupg && \
-    echo "deb https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" | tee -a '/etc/apt/sources.list.d/pgdg.list' && \
-    wget --quiet -O - "https://www.postgresql.org/media/keys/ACCC4CF8.asc" | apt-key add -
-
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install \
-      postgresql-client-16 \
-      python3-dev \
-      gcc \
-      build-essential  \
+RUN apt update && apt-get install --no-install-recommends -y \
+      build-essential \
       wget \
-      libpq-dev && \
+      gnupg \
+      gcc \
+      sudo \
+      python3-dev \
+      python3-pip \
+      python3-wheel \
+      libpq-dev \
+      redis-tools \
+      postgresql-client && \
     apt-get autoremove -y && \
-    apt-get clean && \
+    apt-get clean -y && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/
 
-RUN useradd -U -m -l -s /bin/bash -u 1000 user && usermod -aG sudo user
+RUN ln -s /usr/bin/python3.11 /usr/bin/python
+RUN useradd -U -m -l -s /bin/bash -u 1000 django && usermod -aG sudo django
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV TERM xterm-256color
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV TERM=xterm-256color
+COPY --chmod=740 --chown=1000:1000 docker/django/entrypoint.sh /entrypoint.sh
 
 WORKDIR /project
 
-COPY ./docker/django/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh && chown 1000:1000 /entrypoint.sh
+COPY ../../requirements.txt /project/requirements.txt
 
-USER user:1000:1000
+RUN python -m pip install --no-cache-dir --break-system-packages -U pip && \
+    python -m pip install --no-cache-dir --break-system-packages -r /project/requirements.txt
+
+USER django:1000:1000
 
 ENTRYPOINT ["/entrypoint.sh"]
+CMD /bin/bash

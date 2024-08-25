@@ -22,7 +22,7 @@ if [ ! -f manage.py ]; then
   exec /bin/bash
 else
   echo -e "${GREEN}Project root found!${NC}"
-  # Install package.json
+  # Install devcontainer.json
   npm -D install
 fi
 

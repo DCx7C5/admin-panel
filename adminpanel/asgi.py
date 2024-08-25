@@ -17,7 +17,7 @@ from django.urls import re_path
 
 from core.consumer import TerminalConsumer
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ahs.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'adminpanel.settings')
 
 django_asgi_app = get_asgi_application()
 

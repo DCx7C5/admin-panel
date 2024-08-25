@@ -5,7 +5,7 @@
 <html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
 <head>
   {% block preload_outer %}
-    {% render_bundle 'base' is_preload=True attrs='async'%}
+    {% render_bundle 'index' is_preload=True attrs='async'%}
     {% block preload %}{% endblock %}  
   {% endblock preload_outer %}
   {# -- Page title -- #}
@@ -23,12 +23,12 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   {% endblock %}
   {% block stylesheets_outer %}
-      {% block stylesheets %}{% endblock %}
+    {% block stylesheets %}{% endblock %}
   {% endblock %}
   {% block javascript_head %}{% endblock %}
   {% block extra_head %}{% endblock extra_head %}
   {{ AHS_SERIAL_USER|json_script:"user-data" }}
-  {% render_bundle 'base' %}
+  {% render_bundle 'index' %}
 </head>
 <body class="">
 {# -- ends before body close tag -- #}

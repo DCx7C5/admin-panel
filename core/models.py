@@ -12,7 +12,7 @@ from django.db.models import (
     Manager,
 )
 
-from ahs import settings
+from adminpanel import settings
 
 
 User = settings.AUTH_USER_MODEL

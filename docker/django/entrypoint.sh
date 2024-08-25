@@ -11,34 +11,23 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-check_sql_db() {
-  # Check for PostgreSQL database
+
+check_socket() {
   n=0
-  while [ ! -S "/var/run/postgresql/.s.PGSQL.5432" ] ;
+  while [ ! -S "$2" ] ;
   do
-    sleep 1
-    ((n+=1))
     if [ "$n" -eq 10 ]; then
-      echo -e "${RED}PostgreSQL database is missing...${NC}"
+      echo -e "${RED}$1 database is missing...${NC}"
       INIT_FAILED=1
       exit 1
     fi
+    sleep 1
+    ((n+=1))
   done
-  echo -e "${GREEN}PostgreSQL database found!${NC}"
+  echo -e "${GREEN}$1 database found!${NC}"
 }
 
-check_redis_db() {
-  # Check for redis channel layer database
-  if [ ! -S "/tmp/redis/redis.sock" ]; then
-    echo -e "${RED}Redis channel layer database is missing...${NC}"
-    INIT_FAILED=1
-  else
-    echo -e "${GREEN}Redis channel layer database found!${NC}"
-    INIT_FAILED=0
-  fi
-}
-
-make_database_dump() {
+dump_database() {
   if [ "$DB_BACKUP_ON_SHUTDOWN" -eq 1 ]; then
     echo -e "${GREEN}Creating database backup...${NC}"
     echo -e "${GREEN}Writing to: ${NC}${db_dump_file}"
@@ -62,7 +51,7 @@ install_and_update_requirements() {
 }
 
 shutdown_hook() {
-  make_database_dump
+  dump_database
   echo -e "${GREEN}Shutting down ${RED}DJANGO${GREEN} docker container...${NC}"
   sleep 2
 }
@@ -77,24 +66,9 @@ else
   echo -e "${GREEN}Project root found!${NC}"
 fi
 
-# Check for changes in requirements.txt
-if [ ! -f /project/requirements.txt ]; then
-  echo -e "${RED}requirements.txt is missing...${NC}"
-  INIT_FAILED=1
-else
-  if [ ! -f /home/user/req.bkp ]; then
-    echo -e "${GREEN}Container first start detected...installing modules!${NC}"
-    cp /project/requirements.txt /home/user/req.bkp
-    install_and_update_requirements
-  elif ! cmp -s /home/user/req.bkp /project/requirements.txt; then
-    echo -e "${GREEN}Changes in requirements.txt detected...updating modules!${NC}"
-    install_and_update_requirements
-    cp /project/requirements.txt /home/user/req.bkp
-  fi
-fi
 
-check_redis_db
-check_sql_db
+check_socket Postgresql /var/run/postgresql/.s.PGSQL.5432 &
+check_socket Redis /tmp/redis/redis.sock
 
 if [ $INIT_FAILED -eq 1 ]; then
   echo -e "${RED}Dropping into an interactive shell...${NC}"

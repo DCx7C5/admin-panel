@@ -1,13 +1,11 @@
 import os
 from os import environ
 from pathlib import Path
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = environ.get('SECRET_KEY')
@@ -29,7 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'django.contrib.admindocs',
 
     # django channels
@@ -71,7 +68,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'ahs.urls'
+ROOT_URLCONF = 'adminpanel.urls'
 
 TEMPLATES = [
     {
@@ -91,7 +88,7 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'ahs.asgi.application'
+ASGI_APPLICATION = 'adminpanel.asgi.application'
 
 
 # Database
@@ -188,7 +185,7 @@ LOGGING = {
     'handlers': {
         'rotating_file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'ahs.log',
+            'filename': BASE_DIR / 'adminpanel.log',
             'maxBytes': 1024 * 1024 * 100,
             'backupCount': 10,
             'formatter': 'verbose',

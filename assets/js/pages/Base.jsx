@@ -1,11 +1,11 @@
-import {RestrictedContent} from "./components/RestrictedContent";
-import React, {lazy, useCallback, useEffect, useRef} from "react";
-import DataProvider from "./components/DataProvider";
+import {RestrictedContent} from "../components/RestrictedContent";
+import React, {lazy, useCallback, useRef} from "react";
+import DataProvider from "../components/DataProvider";
 import {createPortal} from "react-dom";
 const Terminal = lazy(
-  () => import('./components/terminal/index'))
+  () => import('../components/terminal'))
 const TerminalToggleButton = lazy(
-  () => import('./components/terminal/TerminalToggleButton'))
+  () => import('../components/terminal/TerminalToggleButton'))
 
 
 const Base = ({children}) => {
@@ -13,7 +13,6 @@ const Base = ({children}) => {
 
   const toggleCb = useCallback((toggleFunc) => {
     onclickRef.current = toggleFunc
-    console.log('lllllll',toggleFunc)
   }, [])
 
   return (

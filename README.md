@@ -25,7 +25,7 @@ DB_PASS=<YOUR_DB_PASSWORD>
 DB_NAME=ahs_dev
 DB_HOST=
 DB_PORT=
-DJANGO_SETTINGS_MODULE='ahs.settings'
+DJANGO_SETTINGS_MODULE='adminpanel.settings'
 DB_BACKUP_ON_SHUTDOWN=1
 DB_RESTORE_ON_START=0
 ```
@@ -39,9 +39,9 @@ DB_RESTORE_ON_START=0
 ```bash
 
 docker compose \
-  --env-file /path/to/ahs/.env \
-  -f /path/to/ahs/docker-compose.yaml \
-  -p ahs up \
+  --env-file /path/to/adminpanel/.env \
+  -f /path/to/adminpanel/docker-compose-dev.yaml \
+  -p adminpanel up \
   -d \
   --build
 
@@ -50,7 +50,7 @@ docker compose \
 
 #### Create django admin user 
 ```bash
-# start a terminal in django docker container and create ahs admin user
+# start a terminal in django docker container and create adminpanel admin user
 
 user@django:/project$ python manage.py createsuperuser
 

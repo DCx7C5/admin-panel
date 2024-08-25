@@ -5,7 +5,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   context: __dirname,
   entry: {
-    base: "./assets/js/index",
+    main: "./assets/js/main",
+    index: "./assets/js/index",
     terminal: "./assets/js/components/terminal/index",
     dashboard: "./assets/js/pages/Dashboard",
     login: "./assets/js/login",
